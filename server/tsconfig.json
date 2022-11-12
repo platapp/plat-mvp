@@ -1,13 +1,25 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "target": "es5",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
         "esModuleInterop": true,
-        "target": "es6",
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "module": "commonjs",
         "moduleResolution": "node",
-        "sourceMap": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
         "outDir": "dist"
     },
-    "lib": [
-        "es2015"
+    "include": [
+        "src"
     ]
 }
