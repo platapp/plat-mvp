@@ -1,0 +1,22 @@
+{
+  "name": "plat-backend",
+  "version": "1.0.0",
+  "description": "backend apis and algos for plat",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "transpile": "npx tsc",
+    "start": "npx tsc && node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@koa/router": "^12.0.0",
+    "@types/koa__router": "^12.0.0",
+    "koa": "^2.13.4",
+    "koa-static": "^5.0.0"
+  }
+}
