@@ -1,24 +1,28 @@
 import Koa from "koa";
 import serve from "koa-static";
 import Router from '@koa/router'
-import { getCustomers, getTransactions, getAccounts } from "./service";
-import { averageTransactions, accountTypes } from "./scores";
+import { getCustomers, getAccounts, getTransactionsFromAccounts } from "./service";
+import { averageTransactions, accountTypes, customerMetrics } from "./scores";
 const router = new Router();
 const app = new Koa();
-app.use(serve("../build/"));
+
+export type CustomerScore = Record<string, any>
 app.use(router.routes()).use(router.allowedMethods());
 router.post('/scores', (ctx, next) => {
-    //todo, implement "calculation" of scores here.  Potentially won't need this
     ctx.body = 'Hello World!';
-}).get('/scores', (ctx, next) => {
-    //todo, implement the retrieval of scores for consumption by UI
-    getCustomers().then(console.log)
-    Promise.all([
-        getTransactions().then(transactions => averageTransactions(transactions, '2020-03-15T13:29:19+0000')),
-        getAccounts().then(accountTypes)
-    ]).then(console.log)
-    ctx.body = 'Hello World!';
-});
+}).get('/accounts', async (ctx, next) => {
+    const scores = await getAccounts().then(accountTypes)
+    ctx.body = scores
+}).get('/customer', async (ctx, next) => {
+    const scores = await getCustomers().then(customer => customerMetrics(customer, new Date()))
+    ctx.body = scores
+}).get('/transactions', async (ctx, next) => {
+    //this is 10 years for testing, the dates aren't recent on the mock transaction data
+    const oneYearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 10))
+    const scores = await getAccounts().then(getTransactionsFromAccounts).then(transactions => averageTransactions(transactions, oneYearAgo.toISOString()))
+    ctx.body = scores
+})
+app.use(serve("../build/"));
 
 
-app.listen(3000);
+app.listen(3001);

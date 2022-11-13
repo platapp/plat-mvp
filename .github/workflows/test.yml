@@ -10,8 +10,13 @@ jobs:
       with:
         node-version: '16.x'
         registry-url: 'https://registry.npmjs.org'
-    - name: test coverage
+    - name: test ui
+      run: |
+        npm run install-all
+        npm test -- --coverage
+
+    - name: test server # dependencies already installed via `install-all`
       run: |
         cd server
-        npm ci
         npm test -- --coverage
+        cd ..

@@ -1,10 +1,12 @@
 ## How to run
 
+`npm run install-all`
+
 `npm run build`
 
-`cd server && npm install && cd ..`
-
 `npm run prod-start`
+
+To mock the FDX api, in a separate terminal run `npm run mock-fdx`.
 
 ## Development
 

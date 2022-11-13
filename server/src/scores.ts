@@ -1,14 +1,19 @@
-import { Transaction, Account, Accounts, AccountTypes } from './service'
+import { Transactions, Accounts, AccountTypes, Customer, extractObjFromKey } from './service'
 
 interface AccountSummary {
     count: number,
     totalBalance: number
 }
 export type HoldAccounts = Record<AccountTypes, AccountSummary>
-export const averageTransactions = (transactions: Transaction[], beginTimestamp: string) => {
-    const { total, totalSum } = transactions.filter(t => t.processedTimestamp > beginTimestamp).reduce((aggr, curr) => {
-        aggr.total += 1
-        aggr.totalSum += curr.amount
+export const averageTransactions = (transactions: Transactions[], beginTimestamp: string) => {
+    const { total, totalSum } = transactions.reduce((aggr, curr) => {
+        const transaction = extractObjFromKey(curr)
+        console.log(transaction)
+        console.log(beginTimestamp)
+        if (transaction && transaction.postedTimestamp > beginTimestamp) {
+            aggr.total += 1
+            aggr.totalSum += transaction.amount
+        }
         return aggr
     }, { total: 0, totalSum: 0 })
 
@@ -29,13 +34,35 @@ const ACCOUNT_TYPE_MAP: HoldAccounts = {
 
 export const accountTypes = (accounts: Accounts[]) => {
     return accounts.reduce((aggr, curr) => {
-        const [account] = Object.keys(curr) as AccountTypes[]
-        const acct: Account | undefined = curr[account]
-        const element: AccountSummary = aggr[account]
-        if (acct && acct.status === "OPEN") {
+        const account = extractObjFromKey(curr)
+        if (account && account.status === "OPEN") {
+            const element: AccountSummary = aggr[account.type]
             element.count += 1
-            element.totalBalance += ("currentBalance" in acct) ? acct.currentBalance : acct.principalBalance
+            element.totalBalance += ("currentBalance" in account) ? account.currentBalance : account.principalBalance
         }
         return aggr
     }, ACCOUNT_TYPE_MAP)
+}
+
+type Location = Record<string, number>
+export const customerMetrics = (customer: Customer, currentDate: Date) => {
+    return {
+        customerAge: currentDate.getFullYear() - new Date(customer.dateOfBirth).getFullYear(),
+        customerLocation: Object.entries(customer.addresses.reduce<Location>((agg, curr) => {
+            if (agg[curr.postalCode]) {
+                agg[curr.postalCode] += 1
+            }
+            else {
+                agg[curr.postalCode] = 1
+            }
+            return agg
+        }, {})).reduce((aggr, [postalCode, numOccurance]) => {
+            if (aggr.occur < numOccurance) {
+                return { occur: numOccurance, postalCode }
+            }
+            else {
+                return aggr
+            }
+        }, { occur: 0, postalCode: "" }).postalCode //selects postal code that shows up most frequently in the address list
+    }
 }
