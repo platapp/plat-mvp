@@ -1,11 +1,12 @@
 ## How to run
 
 `npm run install -all`
-Note that this needs to be done both in the server and the parent folder.
+Note that this needs to be done in both root and server folder.
 
 `npm run build`
 
 `npm run prod-start`
+Note that this needs to be done in both root and server folder.
 
 To mock the FDX api, in a separate terminal run `npm run mock-fdx`.
 
