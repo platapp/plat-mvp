@@ -6,7 +6,10 @@ import Slider from '@mui/material/Slider';
 import { getCustomerInfo, getTransactionInfo, getAccountInfo } from './services/fdx';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
+import { count } from 'console';
 //<Slider aria-label="Volume" value={40} /> 
+
+const Customer = "Clark Kent"
 
 const LABELS = {
   annuityAccount: "annuities",
@@ -48,7 +51,8 @@ function App() {
   }, [])
   return (
 		<div>
-			<div className="display-4 mb-5">Dashboard</div>
+			<div className="display-4 mb-5">Hello {Customer}</div>
+
 			<div className="row row-cols-1 row-cols-md-2 g-4">
 				{
 					accounts ? Object.entries(accounts).map(([key, value]) => {
@@ -56,22 +60,41 @@ function App() {
 							<div className="col">
 								<div className="card">
 									<div className="card-body">
-										<h5 className="card-title">
-											<a
-												className="text-capitalize text-decoration-none h4"
-												data-bs-toggle="modal" 
-												data-bs-target={ "#" + LABELS[key as L] }
-												href="#"
-											> {LABELS[key as L]} 
-											</a>
-										</h5>
+										{ 
+											value.count?
+											<div>
+												<h5 className="card-title">
+													<a
+														className="text-capitalize text-decoration-none h4"
+														data-bs-toggle="modal" 
+														data-bs-target={ "#" + LABELS[key as L] }
+														href="#"
+														> {LABELS[key as L]} 
+													</a>
+												</h5>
 
-										<p className="card-text" style={{ minHeight: "10vh" }}
-											> 
-												{value.count ? 
-													`You have ${value.count} ${LABELS[key as L]} with a total balance of $${value.totalBalance}`
-													: `You don't have any ${LABELS[key as L]}, open one here or click here to learn more!`}
-										</p>
+												<p className="card-text" style={{ minHeight: "10vh" }}>
+													<ul className="list-unstyled">
+														<li>Number of accounts: {value.count}</li>
+														<li>Total value of accounts: {value.totalBalance}</li>
+													</ul>
+												</p>
+											</div>
+											: 
+											<div>
+												<h5 className="card-title">
+													<p
+														className="text-capitalize text-decoration-none h4"
+														data-bs-toggle="modal" 
+														data-bs-target={ "#" + LABELS[key as L] }
+														> {LABELS[key as L]} 
+													</p>
+												</h5>
+												<p className="card-text" style={{ minHeight: "10vh" }}>
+													You don't have any {LABELS[key as L]}, open one here or click <a href="http://www.google.com" target="_blank">here</a> to learn more!
+												</p>
+											</div>
+										}
 
 										<div className="modal fade" id={LABELS[key as L]} aria-labelledby="modalLabel" aria-hidden="true">
 											<div className="modal-dialog modal-fullscreen">
