@@ -6,7 +6,13 @@ import Slider from '@mui/material/Slider';
 import { getCustomerInfo, getTransactionInfo, getAccountInfo } from './services/fdx';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
-import { count } from 'console';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import CardMedia from '@mui/material/CardMedia';
+import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
+import Container from '@mui/material/Container';
 //<Slider aria-label="Volume" value={40} /> 
 
 const Customer = "Clark Kent"
@@ -34,12 +40,35 @@ interface Customer {
   customerLocation: string,
   customerAge: number
 }
+
+interface AccountCardProps {
+  accountType: string,
+  count?: number,
+  totalBalance?: number
+}
+const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => {
+  return <Card >
+    <CardContent>
+      <Typography gutterBottom variant="h5" component="div">
+        {accountType}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {count ? `You have ${count} ${accountType} accounts with a total value of ${totalBalance}` : `You don't have any ${accountType}!`}
+      </Typography>
+    </CardContent>
+    {!count && <CardActions>
+      <Button size="small">Create Account</Button>
+      <Button size="small" href="http://www.google.com">Learn More</Button>
+    </CardActions>}
+  </Card>
+}
+
 type L = keyof typeof LABELS
 function App() {
   const [accounts, setAccounts] = useState<Record<L, AccountInfo> | undefined>(undefined)
   const [customer, setCustomer] = useState<Customer | undefined>(undefined)
   const [transactions, setTransactions] = useState<Transaction | undefined>(undefined)
-  
+
   console.log(accounts)
   console.log(customer)
   console.log(transactions)
@@ -50,80 +79,20 @@ function App() {
     getAccountInfo().then(setAccounts)
   }, [])
   return (
-		<div>
-			<div className="display-4 mb-5">Hello {Customer}</div>
+    <Container>
+      <div className="display-4 mb-5">Hello {Customer}</div>
+      {
+        accounts ? <Grid container spacing={2} rowSpacing={2}>{
+          Object.entries(accounts).map(([key, value]) => {
+            return <Grid xs={12} sm={6}>
+              <AccountCard accountType={LABELS[key as L]} totalBalance={value.totalBalance} count={value.count} />
+            </Grid>
+          })}
+        </Grid> : <CircularProgress />
+      }
+    </Container>
 
-			<div className="row row-cols-1 row-cols-md-2 g-4">
-				{
-					accounts ? Object.entries(accounts).map(([key, value]) => {
-						return <div>
-							<div className="col">
-								<div className="card">
-									<div className="card-body">
-										{ 
-											value.count?
-											<div>
-												<h5 className="card-title">
-													<a
-														className="text-capitalize text-decoration-none h4"
-														data-bs-toggle="modal" 
-														data-bs-target={ "#" + LABELS[key as L] }
-														href="#"
-														> {LABELS[key as L]} 
-													</a>
-												</h5>
-
-												<p className="card-text" style={{ minHeight: "10vh" }}>
-													<ul className="list-unstyled">
-														<li>Number of accounts: {value.count}</li>
-														<li>Total value of accounts: {value.totalBalance}</li>
-													</ul>
-												</p>
-											</div>
-											: 
-											<div>
-												<h5 className="card-title">
-													<p
-														className="text-capitalize text-decoration-none h4"
-														data-bs-toggle="modal" 
-														data-bs-target={ "#" + LABELS[key as L] }
-														> {LABELS[key as L]} 
-													</p>
-												</h5>
-												<p className="card-text" style={{ minHeight: "10vh" }}>
-													You don't have any {LABELS[key as L]}, open one here or click <a href="http://www.google.com" target="_blank">here</a> to learn more!
-												</p>
-											</div>
-										}
-
-										<div className="modal fade" id={LABELS[key as L]} aria-labelledby="modalLabel" aria-hidden="true">
-											<div className="modal-dialog modal-fullscreen">
-												<div className="modal-content">
-													<div className="modal-header">
-														<h1 className="modal-title fs-5 text-capitalize" id="modalLabel">{LABELS[key as L]}</h1>
-														<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-													</div>
-													<div className="modal-body">
-														<p>
-															Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-														</p>
-													</div>
-													<div className="modal-footer">
-														<button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-													</div>
-												</div>
-											</div>
-										</div>
-
-									</div>
-								</div>
-							</div>
-						</div>
-					}) : <CircularProgress />
-				}
-			</div>
-		</div>
-		);
-	}
+  );
+}
 
 export default App;

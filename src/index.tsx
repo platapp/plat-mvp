@@ -24,17 +24,13 @@ root.render(
           </ul>
           <form className="d-flex" id="login">
             <label htmlFor="staticEmail2" className="visually-hidden">Email</label>
-            <input type="text" readOnly className="form-control-plaintext text-white" id="staticEmail2" value="email@example.com"/>
+            <input type="text" readOnly className="form-control-plaintext text-white" id="staticEmail2" value="email@example.com" />
             <button className="btn btn-success" type="submit" id="logout">Logout</button>
           </form>
         </div>
       </div>
     </nav>
-    <div className="container">
-      <div className="pt-3">
-        <App />
-      </div>
-    </div>
+    <App />
   </React.StrictMode>
 );
 
