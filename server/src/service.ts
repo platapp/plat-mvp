@@ -97,6 +97,15 @@ interface FetchResponse<T> {
     [resultKey: string]: T[] | Link | Page,
 }
 
+interface Reward {
+    programName: string,
+    programUrl: string,
+}
+
+interface Rewards {
+    rewardPrograms: Reward[]
+}
+
 export const recurseGetPaginated = async <T>(resultKey: string, url: string, elements: T[] = []): Promise<T[]> => {
     const { links: { next }, [resultKey]: element, page: { totalElements } } = await fetch(url).then(r => r.json()) as FetchResponse<T>
     elements.push(...element as T[])
@@ -110,3 +119,4 @@ export const recurseGetPaginated = async <T>(resultKey: string, url: string, ele
 
 export const getCustomers = (): Promise<Customer> => fetch(path.join(FDX_URL, "customers", "current")).then(r => r.json()) as Promise<Customer>
 
+export const getRewards = (): Promise<Rewards> => fetch(path.join(FDX_URL, "reward-programs")).then(r => r.json()) as Promise<Rewards>

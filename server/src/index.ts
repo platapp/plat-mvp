@@ -1,7 +1,7 @@
 import Koa from "koa";
 import serve from "koa-static";
 import Router from '@koa/router'
-import { getCustomers, getAccounts, getTransactionsFromAccounts } from "./service";
+import { getCustomers, getAccounts, getTransactionsFromAccounts, getRewards } from "./service";
 import { averageTransactions, accountTypes, customerMetrics } from "./scores";
 const router = new Router();
 const app = new Koa();
@@ -21,6 +21,9 @@ router.post('/scores', (ctx, next) => {
     const oneYearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 10))
     const scores = await getAccounts().then(getTransactionsFromAccounts).then(transactions => averageTransactions(transactions, oneYearAgo.toISOString()))
     ctx.body = scores
+}).get('/rewards', async (ctx, next) => {
+    const rewards = await getRewards().then(rewards => rewards.rewardPrograms.map(({ programName, programUrl }) => ({ programName, programUrl })))
+    ctx.body = rewards
 })
 app.use(serve("../build/"));
 

@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { getCustomerInfo, getTransactionInfo, getAccountInfo } from './services/fdx';
+import { getCustomerInfo, getTransactionInfo, getAccountInfo, getRewards } from './services/fdx';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -46,6 +46,12 @@ interface AccountCardProps {
   count?: number,
   totalBalance?: number
 }
+
+interface Reward {
+  programName: string,
+  programUrl: string,
+}
+
 const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => {
   return <Card >
     <CardContent>
@@ -68,15 +74,16 @@ function App() {
   const [accounts, setAccounts] = useState<Record<L, AccountInfo> | undefined>(undefined)
   const [customer, setCustomer] = useState<Customer | undefined>(undefined)
   const [transactions, setTransactions] = useState<Transaction | undefined>(undefined)
-
+  const [rewards, setRewards] = useState<Reward[] | undefined>(undefined)
   console.log(accounts)
   console.log(customer)
   console.log(transactions)
-
+  console.log(rewards)
   useEffect(() => {
     getCustomerInfo().then(setCustomer)
     getTransactionInfo().then(setTransactions)
     getAccountInfo().then(setAccounts)
+    getRewards().then(setRewards)
   }, [])
   return (
     <Container>
@@ -84,7 +91,7 @@ function App() {
       {
         accounts ? <Grid container spacing={2} rowSpacing={2}>{
           Object.entries(accounts).map(([key, value]) => {
-            return <Grid xs={12} sm={6}>
+            return <Grid xs={12} sm={6} key={key}>
               <AccountCard accountType={LABELS[key as L]} totalBalance={value.totalBalance} count={value.count} />
             </Grid>
           })}

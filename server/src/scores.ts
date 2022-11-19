@@ -8,8 +8,6 @@ export type HoldAccounts = Record<AccountTypes, AccountSummary>
 export const averageTransactions = (transactions: Transactions[], beginTimestamp: string) => {
     const { total, totalSum } = transactions.reduce((aggr, curr) => {
         const transaction = extractObjFromKey(curr)
-        console.log(transaction)
-        console.log(beginTimestamp)
         if (transaction && transaction.postedTimestamp > beginTimestamp) {
             aggr.total += 1
             aggr.totalSum += transaction.amount
@@ -35,6 +33,7 @@ const ACCOUNT_TYPE_MAP: HoldAccounts = {
 export const accountTypes = (accounts: Accounts[]) => {
     return accounts.reduce((aggr, curr) => {
         const account = extractObjFromKey(curr)
+        console.log(account)
         if (account && account.status === "OPEN") {
             const element: AccountSummary = aggr[account.type]
             element.count += 1
