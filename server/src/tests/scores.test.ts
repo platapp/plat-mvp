@@ -67,17 +67,17 @@ describe('accountTypes', () => {
             [AccountTypes.LoanAccount]: {
                 status: "OPEN",
                 accountId: "34512",
-                currentBalance: 300.0
+                principalBalance: 300.0
             }
         }
         ]
         expect(accountTypes(accounts)).toEqual({
-            depositAccount: { count: 2, totalBalance: 700.0 },
-            loanAccount: { count: 1, totalBalance: 300.0 },
-            locAccount: { count: 0, totalBalance: 0.0 },
-            investmentAccount: { count: 0, totalBalance: 0.0 },
-            insuranceAccount: { count: 0, totalBalance: 0.0 },
-            annuityAccount: { count: 0, totalBalance: 0.0 }
+            depositAccount: { count: 2, totalBalance: 700.0, balanceKey: "currentBalance", },
+            loanAccount: { count: 1, totalBalance: 300.0, balanceKey: "principalBalance", },
+            locAccount: { count: 0, totalBalance: 0.0, balanceKey: "principalBalance", },
+            investmentAccount: { count: 0, totalBalance: 0.0, balanceKey: "currentValue", },
+            insuranceAccount: { count: 0, totalBalance: 0.0, balanceKey: "policyCoverageAmount", },
+            annuityAccount: { count: 0, totalBalance: 0.0, balanceKey: "surrenderValue", }
         })
     })
 })
