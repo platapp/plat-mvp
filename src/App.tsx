@@ -3,20 +3,29 @@ import logo from './logo.svg';
 import './App.css';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { getCustomerInfo, getTransactionInfo, getAccountInfo, getRewards } from './services/fdx';
+import {
+  getCustomerInfo,
+  getTransactionInfo,
+  getAccountInfo,
+  getRewards,
+  getAuth
+} from './services/fdx';
+
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Container from '@mui/material/Container';
-//<Slider aria-label="Volume" value={40} /> 
+import {
+  useLoaderData,
+} from "react-router-dom";
 
 const Customer = "Clark Kent"
-
+//TODO make client id a variable
+const LOGIN_URL = `${process.env.REACT_APP_LOGIN_URL}/${process.env.REACT_APP_CLIENT_ID}`
 const LABELS = {
   annuityAccount: "annuities",
   depositAccount: "deposit accounts",
@@ -71,22 +80,32 @@ const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => 
 
 type L = keyof typeof LABELS
 function App() {
+  const accessToken = useLoaderData() as string | undefined
   const [accounts, setAccounts] = useState<Record<L, AccountInfo> | undefined>(undefined)
   const [customer, setCustomer] = useState<Customer | undefined>(undefined)
   const [transactions, setTransactions] = useState<Transaction | undefined>(undefined)
   const [rewards, setRewards] = useState<Reward[] | undefined>(undefined)
+  console.log(accessToken)
   console.log(accounts)
   console.log(customer)
   console.log(transactions)
   console.log(rewards)
+
   useEffect(() => {
-    getCustomerInfo().then(setCustomer)
-    getTransactionInfo().then(setTransactions)
-    getAccountInfo().then(setAccounts)
-    getRewards().then(setRewards)
-  }, [])
+    console.log("inside get info effect")
+    if (accessToken === undefined) {
+      window.location.href = LOGIN_URL //redirect to login
+    }
+    else {
+      getCustomerInfo(accessToken).then(setCustomer)
+      getTransactionInfo(accessToken).then(setTransactions)
+      getAccountInfo(accessToken).then(setAccounts)
+      getRewards(accessToken).then(setRewards)
+    }
+  }, [accessToken])
   return (
     <Container>
+
       <div className="display-4 mb-5">Hello {Customer}</div>
       {
         accounts ? <Grid container spacing={2} rowSpacing={2}>{

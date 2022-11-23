@@ -7,9 +7,39 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+} from "react-router-dom";
+import {
+  getAuth
+} from './services/fdx';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+//get query parameter, if any
+export async function loader({ request }: ActionFunctionArgs) {
+  console.log(request)
+  const url = new URL(request.url);
+  const code = url.searchParams.get("code");
+  if (code) {
+    return await getAuth(code)
+  }
+  else {
+    return undefined
+  }
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    loader,
+    element: <App />,
+  },
+]);
 root.render(
   <React.StrictMode>
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
@@ -30,7 +60,7 @@ root.render(
         </div>
       </div>
     </nav>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
