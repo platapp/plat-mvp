@@ -1,15 +1,33 @@
 import fetch from 'node-fetch';
 import path from "path"
-const FDX_URL = process.env.FDX_URL || "http://127.0.0.1:4010"
+
+
+//
+const FDX_URL = process.env.FDX_URL as string
+const FDX_OIDC_URL = process.env.FDX_OIDC_URL as string
 
 interface UnnestedType<T extends string> {
     type: T
 }
 
+
+export interface BalanceTypes {
+    currentBalance: number,
+    principalBalance: number,
+    currentValue: number,
+    policyCoverageAmount: number,
+    surrenderValue: number
+}
+
+export type BalanceType = keyof BalanceTypes
+
+type BaseAccount = {
+    status: string;
+    accountId: string;
+}
 export type Account = {
-    status: string,
-    accountId: string
-} & ({ currentBalance: number } | { principalBalance: number })
+    [key in BalanceType]: number;
+}
 
 export type Transaction = {
     transactionId: string,
@@ -37,7 +55,7 @@ export enum TransactionTypes {
     AnnuityTransaction = "annuityTransaction"
 }
 
-type AccountMap = Record<AccountTypes, Account>
+type AccountMap = Record<AccountTypes, Partial<Account> & BaseAccount>
 export type Accounts = Partial<AccountMap>
 
 type TransactionMap = Record<TransactionTypes, Transaction>
@@ -52,6 +70,14 @@ export interface Customer {
     addresses: Address[]
 }
 
+const applyToken = (token: string) => {
+    return {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+}
+
 export const extractObjFromKey = <T extends string, U>(element: Partial<Record<T, U>>): (U & UnnestedType<T>) | undefined => {
     const [elementKey] = Object.keys(element) as T[] //AccountTypes
     const acct: U | undefined = element[elementKey] //Account
@@ -61,15 +87,17 @@ export const extractObjFromKey = <T extends string, U>(element: Partial<Record<T
     } : undefined
 }
 
-export const getAccounts = (): Promise<Accounts[]> => {
-    return recurseGetPaginated<Accounts>("accounts", path.join(FDX_URL, "accounts"))
+export const getAccounts = (token: string): Promise<Accounts[]> => {
+    const fetchWithToken = (url: string) => fetch(url, applyToken(token))
+    return recurseGetPaginated<Accounts>("accounts", path.join(FDX_URL, "accounts"), fetchWithToken)
 }
 
-export const getTransactionsFromAccounts = (accounts: Accounts[]) => {
+export const getTransactionsFromAccounts = (token: string, accounts: Accounts[]) => {
+    const fetchWithToken = (url: string) => fetch(url, applyToken(token))
     return Promise.all(accounts.map(account => {
         const acct = extractObjFromKey(account)
         if (acct) {
-            return recurseGetPaginated<Transactions>("transactions", path.join(FDX_URL, "accounts", acct.accountId, "transactions"))
+            return recurseGetPaginated<Transactions>("transactions", path.join(FDX_URL, "accounts", acct.accountId, "transactions"), fetchWithToken)
         }
         else {
             return Promise.resolve([])
@@ -77,10 +105,6 @@ export const getTransactionsFromAccounts = (accounts: Accounts[]) => {
     })).then(transactions => transactions.flat())
 }
 
-/*
-export const getTransactions = (): Promise<Transaction[]> => {
-    return recurseGetPaginated<Transaction>("payments", path.join(FDX_URL, "payments"))
-}*/
 
 interface Next {
     href: string
@@ -97,16 +121,52 @@ interface FetchResponse<T> {
     [resultKey: string]: T[] | Link | Page,
 }
 
-export const recurseGetPaginated = async <T>(resultKey: string, url: string, elements: T[] = []): Promise<T[]> => {
-    const { links: { next }, [resultKey]: element, page: { totalElements } } = await fetch(url).then(r => r.json()) as FetchResponse<T>
+interface Reward {
+    programName: string,
+    programUrl: string,
+}
+
+interface Rewards {
+    rewardPrograms: Reward[]
+}
+
+export const recurseGetPaginated = async <T>(resultKey: string, url: string, fetchWithToken: (url: string) => Promise<any>, elements: T[] = []): Promise<T[]> => {
+    const { links, [resultKey]: element } = await fetchWithToken(url).then(r => r.json()) as FetchResponse<T>
     elements.push(...element as T[])
-    if (next && elements.length < totalElements) {
-        return await recurseGetPaginated<T>(resultKey, path.join(FDX_URL, next.href), elements)
+    if (links && links.next) {
+        return await recurseGetPaginated<T>(resultKey, path.join(FDX_URL, links.next.href), fetchWithToken, elements)
     }
     else {
         return Promise.resolve(elements)
     }
 }
 
-export const getCustomers = (): Promise<Customer> => fetch(path.join(FDX_URL, "customers", "current")).then(r => r.json()) as Promise<Customer>
+export const getCustomers = (token: string): Promise<Customer> => {
+    return fetch(path.join(FDX_URL, "customers", "current"), applyToken(token)).then(r => r.json()) as Promise<Customer>
+}
 
+export const getRewards = (token: string): Promise<Rewards> => {
+    return fetch(path.join(FDX_URL, "reward-programs"), applyToken(token)).then(r => r.json()) as Promise<Rewards>
+}
+
+interface Auth {
+    access_token: string,
+    refresh_token: string
+}
+export const auth = (
+    code: string,
+    redirectUri: string,
+    clientId: string,
+    clientSecret: string
+) => fetch(FDX_OIDC_URL,
+    {
+        method: "POST",
+        headers: {
+            'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: Object.entries({ code, redirect_uri: redirectUri, grant_type: "authorization_code" }).map(([key, value]) => encodeURIComponent(key) + '=' + encodeURIComponent(value)).join('&')
+    }).then(r => r.json()).then(({ access_token, refresh_token }: Auth) => ({
+        accessToken: access_token,
+        refreshToken: refresh_token
+    }))

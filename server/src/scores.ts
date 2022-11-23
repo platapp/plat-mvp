@@ -1,15 +1,14 @@
-import { Transactions, Accounts, AccountTypes, Customer, extractObjFromKey } from './service'
+import { Transactions, Accounts, Account, AccountTypes, Customer, extractObjFromKey, BalanceType } from './service'
 
 interface AccountSummary {
     count: number,
-    totalBalance: number
+    totalBalance: number,
+    balanceKey: string
 }
 export type HoldAccounts = Record<AccountTypes, AccountSummary>
 export const averageTransactions = (transactions: Transactions[], beginTimestamp: string) => {
     const { total, totalSum } = transactions.reduce((aggr, curr) => {
         const transaction = extractObjFromKey(curr)
-        console.log(transaction)
-        console.log(beginTimestamp)
         if (transaction && transaction.postedTimestamp > beginTimestamp) {
             aggr.total += 1
             aggr.totalSum += transaction.amount
@@ -24,21 +23,22 @@ export const averageTransactions = (transactions: Transactions[], beginTimestamp
 }
 
 const ACCOUNT_TYPE_MAP: HoldAccounts = {
-    [AccountTypes.DepositAccount]: { count: 0, totalBalance: 0 },
-    [AccountTypes.LoanAccount]: { count: 0, totalBalance: 0 },
-    [AccountTypes.LocAccount]: { count: 0, totalBalance: 0 },
-    [AccountTypes.InvestmentAccount]: { count: 0, totalBalance: 0 },
-    [AccountTypes.InsuranceAccount]: { count: 0, totalBalance: 0 },
-    [AccountTypes.AnnuityAccount]: { count: 0, totalBalance: 0 },
+    [AccountTypes.DepositAccount]: { count: 0, totalBalance: 0, balanceKey: "currentBalance" as BalanceType },
+    [AccountTypes.LoanAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
+    [AccountTypes.LocAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
+    [AccountTypes.InvestmentAccount]: { count: 0, totalBalance: 0, balanceKey: "currentValue" as BalanceType },
+    [AccountTypes.InsuranceAccount]: { count: 0, totalBalance: 0, balanceKey: "policyCoverageAmount" as BalanceType },
+    [AccountTypes.AnnuityAccount]: { count: 0, totalBalance: 0, balanceKey: "surrenderValue" as BalanceType },
 }
 
 export const accountTypes = (accounts: Accounts[]) => {
     return accounts.reduce((aggr, curr) => {
         const account = extractObjFromKey(curr)
         if (account && account.status === "OPEN") {
+            console.log(account)
             const element: AccountSummary = aggr[account.type]
             element.count += 1
-            element.totalBalance += ("currentBalance" in account) ? account.currentBalance : account.principalBalance
+            element.totalBalance += account[element.balanceKey as keyof Account] as number
         }
         return aggr
     }, ACCOUNT_TYPE_MAP)
