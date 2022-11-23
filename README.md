@@ -16,3 +16,23 @@ Both the client and server are typescript apps. The client code is in [src](./sr
 
 To run the mock API server from the parent folder,
 `cd server && npm run mock`
+
+## Authentication
+
+You need to create two `.env` files, one in the root directory and the other in [server](./server).  The root `.env` should contain the following:
+
+```
+REACT_APP_LOGIN_URL="https://tdm.financialdataexchange.org/fdxriauthclient/app/connect"
+REACT_APP_CLIENT_ID="[yourclientid]"
+```
+
+The `.env` in the server directory should contain the following:
+
+```
+REDIRECT_URL="http://127.0.0.1:3001"
+CLIENT_ID="[yourclientid]"
+CLIENT_SECRET = "[yourclientsecret]"
+FDX_URL="https://financialdataexchange-prod.apigee.net/fdx-core-api-v51"
+FDX_OIDC_URL="https://tdm.financialdataexchange.org/fdxriauthserver/oauth2/token"
+```
+
