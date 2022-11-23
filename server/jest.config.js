@@ -3,6 +3,9 @@ module.exports = {
     transform: {
         '^.+\\.(ts|tsx)?$': 'ts-jest'
     },
+    "testPathIgnorePatterns": [
+        "dist"
+    ]
     /*globals: {
         "ts-jest": {
             isolatedModules: true,
