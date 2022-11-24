@@ -99,7 +99,11 @@ describe("customerMetrics", () => {
         }
         expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
             customerAge: 20,
-            customerLocation: "12345"
+            customerLocation: "12345",
+            name: {
+                first: "daniel",
+                last: "stahl"
+            }
         })
     })
     it("gets customer location", () => {
@@ -126,7 +130,11 @@ describe("customerMetrics", () => {
         }
         expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
             customerAge: 20,
-            customerLocation: "12345"
+            customerLocation: "12345",
+            name: {
+                first: "daniel",
+                last: "stahl"
+            }
         })
     })
 })
