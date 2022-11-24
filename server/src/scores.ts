@@ -32,10 +32,15 @@ const ACCOUNT_TYPE_MAP: HoldAccounts = {
 }
 
 export const accountTypes = (accounts: Accounts[]) => {
+    //console.log(accounts)
     return accounts.reduce((aggr, curr) => {
+
         const account = extractObjFromKey(curr)
-        if (account && account.status === "OPEN") {
+        if (account && account.type === AccountTypes.LoanAccount) {
             console.log(account)
+        }
+        if (account /*&& account.status === "OPEN"*/) {
+
             const element: AccountSummary = aggr[account.type]
             element.count += 1
             element.totalBalance += account[element.balanceKey as keyof Account] as number
