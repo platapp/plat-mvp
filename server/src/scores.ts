@@ -32,13 +32,11 @@ const ACCOUNT_TYPE_MAP: HoldAccounts = {
 }
 
 export const accountTypes = (accounts: Accounts[]) => {
-    //console.log(accounts)
+
     return accounts.reduce((aggr, curr) => {
 
         const account = extractObjFromKey(curr)
-        if (account && account.type === AccountTypes.LoanAccount) {
-            console.log(account)
-        }
+
         if (account /*&& account.status === "OPEN"*/) {
 
             const element: AccountSummary = aggr[account.type]
@@ -51,9 +49,11 @@ export const accountTypes = (accounts: Accounts[]) => {
 
 type Location = Record<string, number>
 export const customerMetrics = (customer: Customer, currentDate: Date) => {
+    const { name, dateOfBirth, addresses } = customer
     return {
-        customerAge: currentDate.getFullYear() - new Date(customer.dateOfBirth).getFullYear(),
-        customerLocation: Object.entries(customer.addresses.reduce<Location>((agg, curr) => {
+        customerAge: currentDate.getFullYear() - new Date(dateOfBirth).getFullYear(),
+        name,
+        customerLocation: Object.entries(addresses.reduce<Location>((agg, curr) => {
             if (agg[curr.postalCode]) {
                 agg[curr.postalCode] += 1
             }

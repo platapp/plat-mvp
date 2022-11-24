@@ -62,9 +62,14 @@ interface Address {
     city: string,
     postalCode: string
 }
+interface Name {
+    first: string,
+    last: string
+}
 export interface Customer {
     dateOfBirth: string,
-    addresses: Address[]
+    addresses: Address[],
+    name: Name
 }
 
 const applyToken = (token: string) => {

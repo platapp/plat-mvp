@@ -91,7 +91,11 @@ describe("customerMetrics", () => {
                     city: "somecity",
                     postalCode: "12345"
                 }
-            ]
+            ],
+            name: {
+                first: "daniel",
+                last: "stahl"
+            }
         }
         expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
             customerAge: 20,
@@ -114,7 +118,11 @@ describe("customerMetrics", () => {
                     city: "somecity",
                     postalCode: "12345"
                 }
-            ]
+            ],
+            name: {
+                first: "daniel",
+                last: "stahl"
+            }
         }
         expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
             customerAge: 20,

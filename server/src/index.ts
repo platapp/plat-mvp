@@ -15,6 +15,7 @@ const CLIENT_ID = process.env.CLIENT_ID as string
 const CLIENT_SECRET = process.env.CLIENT_SECRET as string
 const FDX_URL = process.env.FDX_URL as string
 const FDX_OIDC_URL = process.env.FDX_OIDC_URL as string
+const PORT = process.env.PORT || "3001"
 
 const fdxService = fdxServices(FDX_URL)
 const auth = fdxAuth(FDX_OIDC_URL, REDIRECT_URL, CLIENT_ID, CLIENT_SECRET)
@@ -58,4 +59,4 @@ router.post('/scores', (ctx, next) => {
 app.use(serve("../build/"))
 
 
-app.listen(3001);
+app.listen(PORT);

@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
 import {
   getCustomerInfo,
   getTransactionInfo,
   getAccountInfo,
   getRewards,
-  getAuth
 } from './services/fdx';
 
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,15 +19,14 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-const Customer = "Clark Kent"
 //TODO make client id a variable
 const LOGIN_URL = `${process.env.REACT_APP_LOGIN_URL}/${process.env.REACT_APP_CLIENT_ID}`
 const LABELS = {
-  annuityAccount: "annuities",
-  depositAccount: "deposit accounts",
-  insuranceAccount: "insurance accounts",
-  investmentAccount: "investment accounts",
-  loanAccount: "loans",
+  annuityAccount: "Annuities",
+  depositAccount: "Deposit accounts",
+  insuranceAccount: "Insurance accounts",
+  investmentAccount: "Investment accounts",
+  loanAccount: "Loans",
   locAccount: "LOCs",
   totalTransactions: "Number of transaction in last 12 months",
   averageTransactionSize: "Average transaction size"
@@ -45,9 +40,14 @@ interface Transaction {
   totalTransactions: number,
   averageTransactionSize: number
 }
+interface Name {
+  first: string,
+  last: string
+}
 interface Customer {
   customerLocation: string,
-  customerAge: number
+  customerAge: number,
+  name: Name
 }
 
 interface AccountCardProps {
@@ -92,7 +92,6 @@ function App() {
   console.log(rewards)
 
   useEffect(() => {
-    console.log("inside get info effect")
     if (accessToken === undefined) {
       window.location.href = LOGIN_URL //redirect to login
     }
@@ -105,8 +104,7 @@ function App() {
   }, [accessToken])
   return (
     <Container>
-
-      <div className="display-4 mb-5">Hello {Customer}</div>
+      <div className="display-4 mb-5">Hello {customer?.name.first} {customer?.name.last}</div>
       {
         accounts ? <Grid container spacing={2} rowSpacing={2}>{
           Object.entries(accounts).map(([key, value]) => {

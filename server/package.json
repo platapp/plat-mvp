@@ -7,6 +7,7 @@
     "test": "jest",
     "transpile": "npx tsc",
     "start": "npx tsc && node dist/index.js",
+    "dev": "export PORT=3002 && npx tsc && node dist/index.js",
     "mock": "prism mock swagger/fdxapi.customer.yaml"
   },
   "author": "",

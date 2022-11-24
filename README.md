@@ -1,21 +1,21 @@
 ## How to run
 
-`npm run install -all`
-Note that this needs to be done in both root and server folder.
+`npm run install-all`
 
-`npm run build`
+`npm run build` to create the client code
 
-`npm run prod-start`
-Note that this needs to be done in both root and server folder.
+`npm run server-start` to run the server on port 3001 and go to `http://localhost:3001`
 
-To mock the FDX api, in a separate terminal run `npm run mock-fdx`.
 
 ## Development
 
-Both the client and server are typescript apps. The client code is in [src](./src) and uses the React framework.  The server code is in [server](./server).  To transpile the server code run `npm run transpile` from the server directory.  This will create plain javascript files in the `dist` folder.   
+In development, the dev client runs on 3001 and the dev server on 3002.  The oauth redirect still goes to 3001 on the client and then proxies everything to 3002.
 
-To run the mock API server from the parent folder,
-`cd server && npm run mock`
+`npm start`
+
+In another terminal, run `npm run server-dev`.
+
+Both the client and server are typescript apps. The client code is in [src](./src) and uses the React framework.  The server code is in [server](./server).  The server code is transpiled into the `dist` folder.   
 
 ## Authentication
 
