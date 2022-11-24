@@ -10,8 +10,9 @@ import '@fontsource/roboto/700.css';
 import type { ActionFunctionArgs } from "react-router-dom";
 import {
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider
 } from "react-router-dom";
+
 import {
   getAuth
 } from './services/fdx';
@@ -21,8 +22,9 @@ const root = ReactDOM.createRoot(
 
 //get query parameter, if any
 export async function loader({ request }: ActionFunctionArgs) {
+  const codeName = "code"
   const url = new URL(request.url);
-  const code = url.searchParams.get("code");
+  const code = url.searchParams.get(codeName);
   if (code) {
     return await getAuth(code)
   }

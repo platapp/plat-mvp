@@ -17,6 +17,7 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import Container from '@mui/material/Container';
 import {
   useLoaderData,
+  useSearchParams
 } from "react-router-dom";
 
 //TODO make client id a variable
@@ -81,6 +82,8 @@ const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => 
 type L = keyof typeof LABELS
 function App() {
   const accessToken = useLoaderData() as string | undefined
+  const [searchParams, setSearchParams] = useSearchParams()
+
   const [accounts, setAccounts] = useState<Record<L, AccountInfo> | undefined>(undefined)
   const [customer, setCustomer] = useState<Customer | undefined>(undefined)
   const [transactions, setTransactions] = useState<Transaction | undefined>(undefined)
@@ -90,6 +93,14 @@ function App() {
   console.log(customer)
   console.log(transactions)
   console.log(rewards)
+
+  //remove the search parameters.  I wish I could do this in a redirect in the loader, but I don't believe I can  
+  useEffect(() => {
+    Array.from(searchParams.keys()).forEach(v => {
+      searchParams.delete(v);
+    })
+    setSearchParams(searchParams);
+  }, [searchParams, setSearchParams])
 
   useEffect(() => {
     if (accessToken === undefined) {
