@@ -8,21 +8,18 @@ export const MenuItems = [
     {
         name: "Accounts",
         route: "/accounts",
-        //loader: getAccountInfo, //todo, how to pass access token??
         icon: < AccountBalanceWalletIcon />,
         element: <Accounts />
     },
     {
         name: "Transactions",
         route: "/transactions",
-        //loader: getTransactionInfo,
         icon: <PaymentsIcon />,
         element: <Transactions />
     },
     {
         name: "Rewards",
         route: "/rewards",
-        //loader: getRewards,
         icon: <CardMembershipIcon />,
         element: <Rewards />
     }

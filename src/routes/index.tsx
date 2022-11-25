@@ -44,7 +44,6 @@ const router = createBrowserRouter([
         shouldRevalidate: shouldRevalidateLogin,
         children: MenuItems.map(({ route, element }) => ({
             path: route,
-            //loader,
             element
         }))
     },
