@@ -23,7 +23,7 @@ const root = ReactDOM.createRoot(
 const CODE_NAME = "code"
 //get query parameter, if any
 export async function loader({ request }: ActionFunctionArgs) {
-  console.log("Got here")
+
   const url = new URL(request.url);
   const code = url.searchParams.get(CODE_NAME);
   if (code) {
