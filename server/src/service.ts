@@ -93,7 +93,11 @@ type QueryParams = {
 }
 export const fdxServices = (apiUrl: string) => (token: string) => {
     const fetchWithToken = (optionalQueryParams: QueryParams = {}) => (endpoint: string) => {
-        return fetch(`${path.join(apiUrl, endpoint)}?${new URLSearchParams(optionalQueryParams).toString()}`, applyToken(token))
+        const url = new URL(path.join(apiUrl, endpoint))
+        Object.entries(optionalQueryParams).forEach(([key, value]) => {
+            url.searchParams.set(key, value)
+        })
+        return fetch(url.href, applyToken(token))
     }
     return {
         getAccounts: (): Promise<Accounts[]> => {

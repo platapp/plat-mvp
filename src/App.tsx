@@ -83,12 +83,12 @@ type L = keyof typeof LABELS
 function App() {
   const accessToken = useLoaderData() as string | undefined
   const [searchParams, setSearchParams] = useSearchParams()
+  const searchParamsString = searchParams.toString() //to check if I can load
 
   const [accounts, setAccounts] = useState<Record<L, AccountInfo> | undefined>(undefined)
   const [customer, setCustomer] = useState<Customer | undefined>(undefined)
   const [transactions, setTransactions] = useState<Transaction | undefined>(undefined)
   const [rewards, setRewards] = useState<Reward[] | undefined>(undefined)
-  console.log(accessToken)
   console.log(accounts)
   console.log(customer)
   console.log(transactions)
@@ -99,20 +99,21 @@ function App() {
     Array.from(searchParams.keys()).forEach(v => {
       searchParams.delete(v);
     })
-    setSearchParams(searchParams);
+    setSearchParams(searchParams); //this forces a reload of this component since this is a redirect
   }, [searchParams, setSearchParams])
 
   useEffect(() => {
     if (accessToken === undefined) {
       window.location.href = LOGIN_URL //redirect to login
     }
-    else {
+    else if (!searchParamsString) { //only load after the searchParam redirect
+      console.log(accessToken)
       getCustomerInfo(accessToken).then(setCustomer)
       getTransactionInfo(accessToken).then(setTransactions)
       getAccountInfo(accessToken).then(setAccounts)
       getRewards(accessToken).then(setRewards)
     }
-  }, [accessToken])
+  }, [accessToken, searchParamsString])
   return (
     <Container>
       <div className="display-4 mb-5">Hello {customer?.name.first} {customer?.name.last}</div>

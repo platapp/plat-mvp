@@ -20,11 +20,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+const CODE_NAME = "code"
 //get query parameter, if any
 export async function loader({ request }: ActionFunctionArgs) {
-  const codeName = "code"
+  console.log("Got here")
   const url = new URL(request.url);
-  const code = url.searchParams.get(codeName);
+  const code = url.searchParams.get(CODE_NAME);
   if (code) {
     return await getAuth(code)
   }
@@ -33,11 +34,17 @@ export async function loader({ request }: ActionFunctionArgs) {
   }
 }
 
+//only reload the loader if the query parameter exists
+const shouldRevalidate = ({ nextUrl }: { nextUrl: URL }) => {
+  return nextUrl.searchParams.has(CODE_NAME)
+}
+
 const router = createBrowserRouter([
   {
     path: "/",
     loader,
     element: <App />,
+    shouldRevalidate
   },
 ]);
 root.render(

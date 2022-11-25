@@ -22,26 +22,30 @@ export const averageTransactions = (transactions: Transactions[], beginTimestamp
     }
 }
 
-const ACCOUNT_TYPE_MAP: HoldAccounts = {
-    [AccountTypes.DepositAccount]: { count: 0, totalBalance: 0, balanceKey: "currentBalance" as BalanceType },
-    [AccountTypes.LoanAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
-    [AccountTypes.LocAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
-    [AccountTypes.InvestmentAccount]: { count: 0, totalBalance: 0, balanceKey: "currentValue" as BalanceType },
-    [AccountTypes.InsuranceAccount]: { count: 0, totalBalance: 0, balanceKey: "policyCoverageAmount" as BalanceType },
-    [AccountTypes.AnnuityAccount]: { count: 0, totalBalance: 0, balanceKey: "surrenderValue" as BalanceType },
-}
+
 
 export const accountTypes = (accounts: Accounts[]) => {
-
+    const ACCOUNT_TYPE_MAP: HoldAccounts = {
+        [AccountTypes.DepositAccount]: { count: 0, totalBalance: 0, balanceKey: "currentBalance" as BalanceType },
+        [AccountTypes.LoanAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
+        [AccountTypes.LocAccount]: { count: 0, totalBalance: 0, balanceKey: "principalBalance" as BalanceType },
+        [AccountTypes.InvestmentAccount]: { count: 0, totalBalance: 0, balanceKey: "currentValue" as BalanceType },
+        [AccountTypes.InsuranceAccount]: { count: 0, totalBalance: 0, balanceKey: "policyCoverageAmount" as BalanceType },
+        [AccountTypes.AnnuityAccount]: { count: 0, totalBalance: 0, balanceKey: "surrenderValue" as BalanceType },
+    }
     return accounts.reduce((aggr, curr) => {
-
         const account = extractObjFromKey(curr)
+        if (account && account.status === "OPEN") {
 
-        if (account /*&& account.status === "OPEN"*/) {
 
             const element: AccountSummary = aggr[account.type]
+            if (account.type === AccountTypes.LoanAccount) {
+                console.log(account)
+                //console.log("accout type", account.type, "account status", account.status, "account balance", account[element.balanceKey as keyof Account])
+            }
             element.count += 1
-            element.totalBalance += account[element.balanceKey as keyof Account] as number
+            const balance = account[element.balanceKey as keyof Account] as number | undefined
+            element.totalBalance += balance || 0
         }
         return aggr
     }, ACCOUNT_TYPE_MAP)
