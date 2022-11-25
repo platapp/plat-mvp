@@ -1,5 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
+
 import App from './App';
 import {
   createMemoryRouter,
@@ -16,7 +18,9 @@ const router = createMemoryRouter([
   },
 ]);
 test('renders learn react link', () => {
-  render(<RouterProvider router={router} />);
-  const hello = screen.getByText(/Hello/i);
+  act(() => {
+    render(<App />)
+  })
+  const hello = screen.queryAllByText(/Accounts/i)[0];
   expect(hello).toBeInTheDocument();
 });
