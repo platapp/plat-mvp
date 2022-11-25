@@ -8,22 +8,30 @@ import Home, { User } from '../components/home'
 import { MenuItems } from './children'
 const CODE_NAME = "code"
 const LOGIN_URL = `${process.env.REACT_APP_LOGIN_URL}/${process.env.REACT_APP_CLIENT_ID}`
-//const ACCESS_CODE_NAME = "accessCode"
+const ACCESS_CODE_NAME = "accessCode"
+//TODO implement a "logout" function that simply wipes the local storage
 export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<User | undefined> => {
     const url = new URL(request.url);
     const code = url.searchParams.get(CODE_NAME)
-    if (code) {
-        const accessToken = await getAuth(code)
-        const customerInfo = await getCustomerInfo(accessToken)
-        return { ...customerInfo, accessToken }
-    }
-    else {
+    let accessToken = window.localStorage.getItem(ACCESS_CODE_NAME)
+    if (!accessToken && !code) {
         window.location.href = LOGIN_URL //will only get here on first load; see shouldRevalidateLogin
+        return
     }
+    if (!accessToken && code) {
+        accessToken = await getAuth(code)
+    }
+    else if (!accessToken) {
+        //can never get here, but needed so tyepscript knows that accesstoken has a value
+        return
+    }
+    window.localStorage.setItem(ACCESS_CODE_NAME, accessToken)
+    const customerInfo = await getCustomerInfo(accessToken)
+    return { ...customerInfo, accessToken }
+
 }
 
 export const shouldRevalidateLogin = ({ nextUrl }: { nextUrl: URL }) => {
-    console.log(nextUrl)
     return nextUrl.searchParams.has(CODE_NAME)
 }
 
