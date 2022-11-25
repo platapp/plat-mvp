@@ -20,7 +20,6 @@ import {
   useSearchParams
 } from "react-router-dom";
 
-//TODO make client id a variable
 const LOGIN_URL = `${process.env.REACT_APP_LOGIN_URL}/${process.env.REACT_APP_CLIENT_ID}`
 const LABELS = {
   annuityAccount: "Annuities",
