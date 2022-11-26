@@ -1,23 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import Toolbar from '@mui/material/Toolbar';
+import React, { useState } from 'react';
+
+import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import CircularProgress from '@mui/material/CircularProgress';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Container from '@mui/material/Container';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+
 import { MenuItems } from '../routes/children'
-
-
+import { logout } from '../utils';
 import {
     useLoaderData,
-    useSearchParams,
     NavLink,
     Outlet,
     NavLinkProps
@@ -63,18 +68,41 @@ const Home = () => {
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-    const [searchParams, setSearchParams] = useSearchParams()
-
-    //remove the search parameters.  I wish I could do this in a redirect in the loader, but I don't believe I can  
-    useEffect(() => {
-        Array.from(searchParams.keys()).forEach(v => {
-            searchParams.delete(v);
-        })
-        setSearchParams(searchParams); //this forces a reload of this component since this is a redirect
-    }, [searchParams, setSearchParams])
 
     return <Box sx={{ display: 'flex' }}>
         <CssBaseline />
+        <AppBar
+            position="fixed"
+            sx={{
+                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                ml: { sm: `${drawerWidth}px` },
+            }}
+        >
+            <Toolbar>
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    edge="start"
+                    onClick={handleDrawerToggle}
+                    sx={{ mr: 2, display: { sm: 'none' } }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                    Plat
+                </Typography>
+                <Tooltip title="Token refresh">
+                    <IconButton
+                        color="inherit"
+                        aria-label="logout"
+                        edge="end"
+                        onClick={logout}
+                    >
+                        <LogoutIcon />
+                    </IconButton>
+                </Tooltip>
+            </Toolbar>
+        </AppBar>
         <Box
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -111,6 +139,7 @@ const Home = () => {
             sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
             <Container>
+                <Toolbar />
                 {user ?
                     <><Typography gutterBottom variant="h3" component="div"> Hello {user.name.first} {user.name.last}</Typography><Outlet /></> :
                     <CircularProgress />
