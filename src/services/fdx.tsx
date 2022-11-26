@@ -19,7 +19,7 @@ const wrapFetch = async (url: string) => {
     }
 }
 
-export const getCustomerInfo = () => wrapFetch(`/customer`) as Promise<Customer>
+export const getCustomerInfo = () => wrapFetch(`/customer`)
 export const getTransactionInfo = () => wrapFetch(`/transactions`)
 export const getAccountInfo = () => wrapFetch(`/accounts`)
 export const getRewards = () => wrapFetch(`/rewards`)

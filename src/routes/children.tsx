@@ -10,10 +10,9 @@ export const MenuItems = [
     {
         name: "Accounts",
         route: "/accounts",
-        icon: < AccountBalanceWalletIcon />,
+        icon: <AccountBalanceWalletIcon />,
         element: <Accounts />,
         loader: async ({ request }: ActionFunctionArgs): Promise<Record<L, AccountInfo>> => {
-            console.log(request)
             return getAccountInfo()
         }
     },

@@ -61,7 +61,7 @@ const drawerWidth = 240 //TODO, make this variable
 const container = window !== undefined ? () => window.document.body : undefined;
 
 const Home = () => {
-    const user = useLoaderData() as Customer | undefined
+    const user = useLoaderData() as Customer
     const [mobileOpen, setMobileOpen] = useState(false);
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -138,15 +138,12 @@ const Home = () => {
         >
             <Container>
                 <Toolbar />
-
                 <Typography gutterBottom variant="h3" component="div">
                     {user && `Hello ${user.name.first} ${user.name.last}`}
                 </Typography>
                 <Outlet />
-
                 {navigation.state === "loading" && <CircularProgress />}
             </Container>
-
         </Box>
     </Box>
 

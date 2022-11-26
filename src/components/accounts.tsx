@@ -35,7 +35,7 @@ const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => 
                 {accountType}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-                {count ? `You have ${count} ${accountType} accounts with a total value of ${totalBalance}` : `You don't have any ${accountType}!`}
+                {count ? `You have ${count} ${accountType} with a total value of ${totalBalance}` : `You don't have any ${accountType}!`}
             </Typography>
         </CardContent>
         {!count && <CardActions>
