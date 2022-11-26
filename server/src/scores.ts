@@ -36,13 +36,7 @@ export const accountTypes = (accounts: Accounts[]) => {
     return accounts.reduce((aggr, curr) => {
         const account = extractObjFromKey(curr)
         if (account && account.status === "OPEN") {
-
-
             const element: AccountSummary = aggr[account.type]
-            if (account.type === AccountTypes.LoanAccount) {
-                console.log(account)
-                //console.log("accout type", account.type, "account status", account.status, "account balance", account[element.balanceKey as keyof Account])
-            }
             element.count += 1
             const balance = account[element.balanceKey as keyof Account] as number | undefined
             element.totalBalance += balance || 0

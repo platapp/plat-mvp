@@ -1,57 +1,49 @@
-import { ActionFunctionArgs } from "react-router-dom";
+import { ActionFunctionArgs, redirect } from "react-router-dom";
 import {
     getAuth,
+    Customer,
     getCustomerInfo,
 } from '../services/fdx';
 import { createBrowserRouter } from "react-router-dom";
-import Home, { User } from '../components/home'
+import Home from '../components/home'
 import { MenuItems } from './children'
 import {
-    removeAllQueryParams,
-    routeToFDXLogin,
-    getAccessTokenFromLocalStorage,
-    storeAccessTokenInLocalStorage
+    routeToFDXLogin
 } from "../utils";
+import Login from "../components/login";
 const CODE_NAME = "code"
 
-export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<User | undefined> => {
+//note that an "unathorized" will be sent back from any fetch that isn't "getAuth".
+//this will then force the client to routeToFDX, see ../services/fdx.tsx
+export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Response | undefined> => {
     const url = new URL(request.url);
     const code = url.searchParams.get(CODE_NAME)
-    let accessToken = getAccessTokenFromLocalStorage()
-    if (!accessToken && !code) {
-        routeToFDXLogin() //will only get here on first load; see shouldRevalidateLogin
+    if (!code) {
+        routeToFDXLogin() //will only get here if a mistake was made (eg, going to this route manually through the browser)
         return
     }
-    if (!accessToken && code) {
-        accessToken = await getAuth(code)
+    if (code) {
+        await getAuth(code)
     }
-    else if (!accessToken) {
-        //can never get here, but needed so tyepscript knows that accesstoken has a value
-        return
-    }
-    removeAllQueryParams(url)
-    storeAccessTokenInLocalStorage(accessToken)
-    const customerInfo = await getCustomerInfo(accessToken)
-    return { ...customerInfo, accessToken }
-
+    return redirect("/")
 }
 
-export const shouldRevalidateLogin = ({ nextUrl }: { nextUrl: URL }) => {
-    return nextUrl.searchParams.has(CODE_NAME)
+export const homeLoader = async ({ request }: ActionFunctionArgs): Promise<Customer> => {
+    return getCustomerInfo()
 }
 
 const router = createBrowserRouter([
     {
         path: "/",
-        loader: loginLoader,
-        id: "root", //in order to get the data from this route from children
+        loader: homeLoader,
         element: <Home />,
-        shouldRevalidate: shouldRevalidateLogin,
-        children: MenuItems.map(({ route, element }) => ({
+        children: MenuItems.map(({ route, element, loader }) => ({
             path: route,
-            element
+            element,
+            loader
         }))
     },
+    { path: "/login", element: <Login />, loader: loginLoader }
 ]);
 
 export default router

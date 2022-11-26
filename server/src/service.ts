@@ -123,23 +123,37 @@ export const fdxServices = (apiUrl: string) => (token: string) => {
 
     }
 }//
-export const fdxAuth = (authUrl: string,
+export const fdxAuth = (
+    authUrl: string,
     redirectUri: string,
     clientId: string,
     clientSecret: string
-) => (code: string) => fetch(authUrl,
-    {
-        method: "POST",
-        headers: {
-            'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({ code, redirect_uri: redirectUri, grant_type: "authorization_code" }).toString() //objectToQuery({ code, redirect_uri: redirectUri, grant_type: "authorization_code" })
-    }).then(r => r.json()).then(({ access_token, refresh_token }: Auth) => ({
-        accessToken: access_token,
-        refreshToken: refresh_token
-    }))
-
+) => {
+    const headers = {
+        'Authorization': `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    return {
+        auth: (code: string) => fetch(authUrl,
+            {
+                method: "POST",
+                headers,
+                body: new URLSearchParams({ code, redirect_uri: redirectUri, grant_type: "authorization_code" }).toString()
+            }).then(r => r.json()).then(({ access_token, refresh_token }: Auth) => ({
+                accessToken: access_token,
+                refreshToken: refresh_token
+            })),
+        refresh: (refreshToken: string) => fetch(authUrl,
+            {
+                method: "POST",
+                headers,
+                body: new URLSearchParams({ refresh_token: refreshToken, grant_type: "refresh_token" }).toString()
+            }).then(r => r.json()).then(({ access_token, refresh_token }: Auth) => ({
+                accessToken: access_token,
+                refreshToken: refresh_token
+            }))
+    }
+}
 interface Next {
     href: string
 }
