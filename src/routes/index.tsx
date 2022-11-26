@@ -1,39 +1,30 @@
 import { ActionFunctionArgs } from "react-router-dom";
 import {
     getAuth,
+    Customer,
     getCustomerInfo,
 } from '../services/fdx';
 import { createBrowserRouter } from "react-router-dom";
-import Home, { User } from '../components/home'
+import Home from '../components/home'
 import { MenuItems } from './children'
 import {
     removeAllQueryParams,
-    routeToFDXLogin,
-    getAccessTokenFromLocalStorage,
-    storeAccessTokenInLocalStorage
+    routeToFDXLogin
 } from "../utils";
 const CODE_NAME = "code"
 
-export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<User | undefined> => {
+export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Customer | undefined> => {
     const url = new URL(request.url);
     const code = url.searchParams.get(CODE_NAME)
-    let accessToken = getAccessTokenFromLocalStorage()
-    if (!accessToken && !code) {
+    if (!code) {
         routeToFDXLogin() //will only get here on first load; see shouldRevalidateLogin
         return
     }
-    if (!accessToken && code) {
-        accessToken = await getAuth(code)
-    }
-    else if (!accessToken) {
-        //can never get here, but needed so tyepscript knows that accesstoken has a value
-        return
+    if (code) {
+        await getAuth(code)
     }
     removeAllQueryParams(url)
-    storeAccessTokenInLocalStorage(accessToken)
-    const customerInfo = await getCustomerInfo(accessToken)
-    return { ...customerInfo, accessToken }
-
+    return getCustomerInfo()
 }
 
 export const shouldRevalidateLogin = ({ nextUrl }: { nextUrl: URL }) => {
@@ -44,12 +35,12 @@ const router = createBrowserRouter([
     {
         path: "/",
         loader: loginLoader,
-        id: "root", //in order to get the data from this route from children
         element: <Home />,
         shouldRevalidate: shouldRevalidateLogin,
-        children: MenuItems.map(({ route, element }) => ({
+        children: MenuItems.map(({ route, element, loader }) => ({
             path: route,
-            element
+            element,
+            loader
         }))
     },
 ]);

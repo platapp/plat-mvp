@@ -25,15 +25,13 @@ import {
     useLoaderData,
     NavLink,
     Outlet,
-    NavLinkProps
+    NavLinkProps,
+    useNavigation
 } from "react-router-dom";
 
 import { Customer } from '../services/fdx'
 
 
-export interface User extends Customer {
-    accessToken: string
-}
 const navLinkCssClasses = (otherClasses: string) => ({ isActive }: { isActive: boolean }): string => {
     return isActive ? `${otherClasses} Mui-selected` : otherClasses
 }
@@ -63,12 +61,12 @@ const drawerWidth = 240 //TODO, make this variable
 const container = window !== undefined ? () => window.document.body : undefined;
 
 const Home = () => {
-    const user = useLoaderData() as User | undefined //will only return User since if not a user, then will redirect
+    const user = useLoaderData() as Customer | undefined
     const [mobileOpen, setMobileOpen] = useState(false);
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
+    const navigation = useNavigation()
     return <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar
@@ -140,10 +138,13 @@ const Home = () => {
         >
             <Container>
                 <Toolbar />
-                {user ?
-                    <><Typography gutterBottom variant="h3" component="div"> Hello {user.name.first} {user.name.last}</Typography><Outlet /></> :
-                    <CircularProgress />
-                }
+
+                <Typography gutterBottom variant="h3" component="div">
+                    {user && `Hello ${user.name.first} ${user.name.last}`}
+                </Typography>
+                <Outlet />
+
+                {navigation.state === "loading" && <CircularProgress />}
             </Container>
 
         </Box>
