@@ -22,13 +22,6 @@ const auth = fdxAuth(FDX_OIDC_URL, REDIRECT_URL, CLIENT_ID, CLIENT_SECRET)
 export type CustomerScore = Record<string, any>
 app.use(router.routes()).use(router.allowedMethods());
 
-app.use(async (ctx, next) => {
-    ctx.status = 200
-    console.log('Setting status')
-    // Call the next middleware, wait for it to complete
-    await next()
-})
-
 const TOKEN_NAME = "token"
 const REFRESH_TOKEN_NAME = "refresh_token"
 const setCookies = (
@@ -36,8 +29,15 @@ const setCookies = (
     accessToken: string,
     refreshToken: string
 ) => {
-    ctx.cookies.set(TOKEN_NAME, accessToken, { httpOnly: true, maxAge: 3000 }); //expire after an hour
-    ctx.cookies.set(REFRESH_TOKEN_NAME, refreshToken, { httpOnly: false, maxAge: 500000 }); //expire later than access token
+    ctx.cookies.set(TOKEN_NAME, accessToken, { httpOnly: true, maxAge: 3600000 }); //expire after an hour
+
+    //expire later than access token so that if user is playing around in the app it doesn't redirect to login
+    ctx.cookies.set(REFRESH_TOKEN_NAME, refreshToken, { httpOnly: true, maxAge: 3700000 });
+}
+const getToken = (
+    ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext & Router.RouterParamContext<Koa.DefaultState, Koa.DefaultContext>, unknown>,
+) => {
+    return ctx.cookies.get(TOKEN_NAME) || ctx.state.accessToken as string
 }
 const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext & Router.RouterParamContext<Koa.DefaultState, Koa.DefaultContext>, unknown>, next: Koa.Next) => {
     const accessToken = ctx.cookies.get(TOKEN_NAME)
@@ -46,11 +46,9 @@ const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, 
         return next()
     }
     else if (refreshToken) {
-        console.log(refreshToken)
-        const result = await auth.refresh(refreshToken)
-        console.log(result)
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = result
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await auth.refresh(refreshToken)
         setCookies(ctx, newAccessToken, newRefreshToken)
+        ctx.state.accessToken = newAccessToken
         return next()
     }
     else {
@@ -62,23 +60,22 @@ const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, 
 router.post('/scores', (ctx) => {
     ctx.body = 'Hello World!';
 }).get('/accounts', cookieMiddleware, async (ctx) => {
-    const token = ctx.cookies.get(TOKEN_NAME) as string
+    const token = getToken(ctx)
     const scores = await fdxService(token).getAccounts().then(accountTypes)
     ctx.body = scores
-
 }).get('/customer', cookieMiddleware, async (ctx) => {
-    const token = ctx.cookies.get(TOKEN_NAME) as string
+    const token = getToken(ctx)
     const scores = await fdxService(token).getCustomers().then(customer => customerMetrics(customer, new Date()))
     ctx.body = scores
 }).get('/transactions', cookieMiddleware, async (ctx) => {
-    const token = ctx.cookies.get(TOKEN_NAME) as string
+    const token = getToken(ctx)
     //this is 10 years for testing, the dates aren't recent on the mock transaction data
     const oneYearAgo = new Date(new Date().setFullYear(new Date().getFullYear() - 10))
     const fdxWithToken = fdxService(token)
     const scores = await fdxWithToken.getAccounts().then(fdxWithToken.getTransactionsFromAccounts).then(transactions => averageTransactions(transactions, oneYearAgo.toISOString()))
     ctx.body = scores
 }).get('/rewards', cookieMiddleware, async (ctx) => {
-    const token = ctx.cookies.get(TOKEN_NAME) as string
+    const token = getToken(ctx)
     const rewards = await fdxService(token).getRewards().then(rewards => rewards.rewardPrograms.map(({ programName, programUrl }) => ({ programName, programUrl })))
     ctx.body = rewards
 }).get('/auth', async (ctx) => { //on load, client calls this.  If not logged in, redirect to FDX login
@@ -86,9 +83,7 @@ router.post('/scores', (ctx) => {
     if (code) {
         const { accessToken, refreshToken } = await auth.auth(code as string)
         ctx.status = 200;
-        ctx.cookies.set(TOKEN_NAME, accessToken, { httpOnly: true, maxAge: 3000 }); //expire after an hour
-        ctx.cookies.set(REFRESH_TOKEN_NAME, refreshToken, { httpOnly: false, maxAge: 5000 }); //expire later than access token
-        //ctx.body = { accessToken, refreshToken }
+        setCookies(ctx, accessToken, refreshToken)
     }
     else {
         ctx.status = 401
