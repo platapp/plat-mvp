@@ -1,0 +1,14 @@
+.textCapitalize {
+  text-transform: capitalize;
+}
+
+.full {
+  height: 100vh !important;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}

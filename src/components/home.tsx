@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../styles.css'; 
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -30,7 +31,6 @@ import {
 } from "react-router-dom";
 
 import { Customer } from '../services/fdx'
-
 
 const navLinkCssClasses = (otherClasses: string) => ({ isActive }: { isActive: boolean }): string => {
     return isActive ? `${otherClasses} Mui-selected` : otherClasses
@@ -67,86 +67,94 @@ const Home = () => {
         setMobileOpen(!mobileOpen);
     };
     const navigation = useNavigation()
-    return <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar
-            position="fixed"
-            sx={{
-                width: { sm: `calc(100% - ${drawerWidth}px)` },
-                ml: { sm: `${drawerWidth}px` },
-            }}
-        >
-            <Toolbar>
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                    Plat
-                </Typography>
-                <Tooltip title="Token refresh">
+    return <div className="full">
+        <Box sx={{ display: 'flex' }}>
+            <CssBaseline />
+            <AppBar
+                position="fixed"
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` },
+                }}
+            >
+                <Toolbar>
                     <IconButton
                         color="inherit"
-                        aria-label="logout"
-                        edge="end"
-                        onClick={logout}
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
                     >
-                        <LogoutIcon />
+                        <MenuIcon />
                     </IconButton>
-                </Tooltip>
-            </Toolbar>
-        </AppBar>
-        <Box
-            component="nav"
-            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-            aria-label="mailbox folders"
-        >
-            <Drawer
-                container={container}
-                variant="temporary"
-                open={mobileOpen}
-                onClose={handleDrawerToggle}
-                ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                }}
-                sx={{
-                    display: { xs: 'block', sm: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                }}
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                        Plat
+                    </Typography>
+                    <Tooltip title="Token refresh">
+                        <IconButton
+                            color="inherit"
+                            aria-label="logout"
+                            edge="end"
+                            onClick={logout}
+                        >
+                            <LogoutIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Toolbar>
+            </AppBar>
+            <Box
+                component="nav"
+                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+                aria-label="mailbox folders"
             >
-                {drawer}
-            </Drawer>
-            <Drawer
-                variant="permanent"
-                sx={{
-                    display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                }}
-                open
+                <Drawer
+                    container={container}
+                    variant="temporary"
+                    open={mobileOpen}
+                    onClose={handleDrawerToggle}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+                    sx={{
+                        display: { xs: 'block', sm: 'none' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                >
+                    {drawer}
+                </Drawer>
+                <Drawer
+                    variant="permanent"
+                    sx={{
+                        display: { xs: 'none', sm: 'block' },
+                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+                    }}
+                    open
+                >
+                    {drawer}
+                </Drawer>
+            </Box >
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
-                {drawer}
-            </Drawer>
-        </Box >
-        <Box
-            component="main"
-            sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-        >
-            <Container>
-                <Toolbar />
-                <Typography gutterBottom variant="h3" component="div">
-                    {user && `Hello ${user.name.first} ${user.name.last}`}
-                </Typography>
-                <Outlet />
-                {navigation.state === "loading" && <CircularProgress />}
-            </Container>
+                <Container>
+                    <Toolbar />
+                    <Typography 
+                        gutterBottom 
+                        variant="h3" 
+                        component="div"
+                        className="textCapitalize"
+                    >
+                        {user && `Hello ${user.name.first} ${user.name.last}`}
+                    </Typography>
+                    <Outlet />
+                    <div className="center">
+                        { navigation.state === "loading" && <CircularProgress/> }
+                    </div>
+                </Container>
+            </Box>
         </Box>
-    </Box>
-
+    </div>
 }
 
 export default Home;
