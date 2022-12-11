@@ -27,7 +27,6 @@ export const minStatementDate = (statements: Statement[]) => {
     return statements.length > 0 ? statements.map(statement => statement.statementDate).reduce((aggr, curr) => aggr > curr ? curr : aggr) : ""
 }
 
-
 export const accountTypes = (accounts: Accounts[], statements: Statement[]) => {
     const ACCOUNT_TYPE_MAP: HoldAccounts = {
         [AccountTypes.DepositAccount]: { minDateOpened: "", count: 0, totalBalance: 0, balanceKey: "currentBalance" as BalanceType },

@@ -63,9 +63,7 @@ router.post('/scores', (ctx) => {
     const token = getToken(ctx)
     const fdxWithToken = fdxService(token)
     const accounts = await fdxWithToken.getAccounts()
-    //const scores = accountTypes(accounts)
     const statements = await fdxWithToken.getStatementsFromAccounts(accounts)
-    //console.log(minAccountDate)//.then(minStatementDate)
     const scores = accountTypes(accounts, statements)
     ctx.body = scores
 }).get('/customer', cookieMiddleware, async (ctx) => {
