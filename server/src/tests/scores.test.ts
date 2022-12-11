@@ -71,13 +71,22 @@ describe('accountTypes', () => {
             }
         }
         ]
-        expect(accountTypes(accounts)).toEqual({
-            depositAccount: { count: 2, totalBalance: 700.0, balanceKey: "currentBalance", },
-            loanAccount: { count: 1, totalBalance: 300.0, balanceKey: "principalBalance", },
-            locAccount: { count: 0, totalBalance: 0.0, balanceKey: "principalBalance", },
-            investmentAccount: { count: 0, totalBalance: 0.0, balanceKey: "currentValue", },
-            insuranceAccount: { count: 0, totalBalance: 0.0, balanceKey: "policyCoverageAmount", },
-            annuityAccount: { count: 0, totalBalance: 0.0, balanceKey: "surrenderValue", }
+        const statements = [{
+            accountId: "34512",
+            statementDate: "2020-01-01",
+            statementId: "1234"
+        }, {
+            accountId: "34512",
+            statementDate: "2021-01-01",
+            statementId: "1235"
+        }]
+        expect(accountTypes(accounts, statements)).toEqual({
+            depositAccount: { minDateOpened: "", count: 2, totalBalance: 700.0, balanceKey: "currentBalance", },
+            loanAccount: { minDateOpened: "2020-01-01", count: 1, totalBalance: 300.0, balanceKey: "principalBalance", },
+            locAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "principalBalance", },
+            investmentAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "currentValue", },
+            insuranceAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "policyCoverageAmount", },
+            annuityAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "surrenderValue", }
         })
     })
 })

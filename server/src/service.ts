@@ -34,6 +34,12 @@ export type Transaction = {
     postedTimestamp: string //in theory transactionTimestamp should also be here, but not included in the sample payload
 }
 
+export type Statement = {
+    statementId: string,
+    statementDate: string,
+    accountId: string
+}
+
 export enum AccountTypes {
     DepositAccount = "depositAccount",
     LoanAccount = "loanAccount",
@@ -56,7 +62,10 @@ type AccountMap = Record<AccountTypes, Partial<Account> & BaseAccount>
 export type Accounts = Partial<AccountMap>
 
 type TransactionMap = Record<TransactionTypes, Transaction>
+
 export type Transactions = Partial<TransactionMap>
+
+//export type Statements = Partial<StatementMap>
 
 interface Address {
     city: string,
@@ -113,6 +122,17 @@ export const fdxServices = (apiUrl: string) => (token: string) => {
                     return Promise.resolve([])
                 }
             })).then(transactions => transactions.flat())
+        },
+        getStatementsFromAccounts: (accounts: Accounts[]) => {
+            return Promise.all(accounts.map(account => {
+                const acct = extractObjFromKey(account)
+                if (acct) {
+                    return recurseGetPaginated<Statement>("statements", path.join("accounts", acct.accountId, "statements"), fetchWithToken())
+                }
+                else {
+                    return Promise.resolve([])
+                }
+            })).then(statements => statements.flat())
         },
         getCustomers: (): Promise<Customer> => {
             return fetchWithToken()(path.join("customers", "current")).then(r => r.json()) as Promise<Customer>
