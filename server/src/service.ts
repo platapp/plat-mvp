@@ -65,8 +65,6 @@ type TransactionMap = Record<TransactionTypes, Transaction>
 
 export type Transactions = Partial<TransactionMap>
 
-//export type Statements = Partial<StatementMap>
-
 interface Address {
     city: string,
     postalCode: string
