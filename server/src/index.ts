@@ -1,7 +1,7 @@
 import Koa from "koa";
 import serve from "koa-static";
 import Router from '@koa/router'
-import { averageTransactions, accountTypes, customerMetrics } from "./scores";
+import { averageTransactions, accountTypes, customerMetrics, minStatementDate } from "./scores";
 import { fdxServices, fdxAuth } from "./service";
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -61,7 +61,10 @@ router.post('/scores', (ctx) => {
     ctx.body = 'Hello World!';
 }).get('/accounts', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)
-    const scores = await fdxService(token).getAccounts().then(accountTypes)
+    const fdxWithToken = fdxService(token)
+    const accounts = await fdxWithToken.getAccounts()
+    const statements = await fdxWithToken.getStatementsFromAccounts(accounts)
+    const scores = accountTypes(accounts, statements)
     ctx.body = scores
 }).get('/customer', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)
