@@ -22,32 +22,44 @@ const auth = fdxAuth(FDX_OIDC_URL, REDIRECT_URL, CLIENT_ID, CLIENT_SECRET)
 export type CustomerScore = Record<string, any>
 app.use(router.routes()).use(router.allowedMethods());
 
-const TOKEN_NAME = "token"
-const REFRESH_TOKEN_NAME = "refresh_token"
+const getTokenName = (bank: string) => `token_${bank}`
+
+const getRefreshTokenName = (bank: string) => `refresh_token_${bank}`
 const setCookies = (
     ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext & Router.RouterParamContext<Koa.DefaultState, Koa.DefaultContext>, unknown>,
+    bank: string,
     accessToken: string,
     refreshToken: string
 ) => {
-    ctx.cookies.set(TOKEN_NAME, accessToken, { httpOnly: true, maxAge: 3600000 }); //expire after an hour
+    const tokenName = getTokenName(bank)
+    const refreshTokenName = getRefreshTokenName(bank)
+    //secure should be `true` in production
+    ctx.cookies.set(tokenName, accessToken, { secure: false, httpOnly: false, maxAge: 3600000 }); //expire after an hour
 
     //expire later than access token so that if user is playing around in the app it doesn't redirect to login
-    ctx.cookies.set(REFRESH_TOKEN_NAME, refreshToken, { httpOnly: true, maxAge: 3700000 });
+    //secure should be `true` in production
+    ctx.cookies.set(refreshTokenName, refreshToken, { secure: false, httpOnly: false, maxAge: 3700000 });
 }
 const getToken = (
     ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext & Router.RouterParamContext<Koa.DefaultState, Koa.DefaultContext>, unknown>,
 ) => {
-    return ctx.cookies.get(TOKEN_NAME) || ctx.state.accessToken as string
+    const bank = ctx.request.query.bank as string
+    const tokenName = getTokenName(bank)
+    return ctx.cookies.get(tokenName) || ctx.state.accessToken as string
 }
 const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext & Router.RouterParamContext<Koa.DefaultState, Koa.DefaultContext>, unknown>, next: Koa.Next) => {
-    const accessToken = ctx.cookies.get(TOKEN_NAME)
-    const refreshToken = ctx.cookies.get(REFRESH_TOKEN_NAME)
+    const bank = ctx.request.query.bank as string
+    const tokenName = getTokenName(bank)
+    const refreshTokenName = getRefreshTokenName(bank)
+    const accessToken = ctx.cookies.get(tokenName)
+    const refreshToken = ctx.cookies.get(refreshTokenName)
+
     if (accessToken) {
         return next()
     }
     else if (refreshToken) {
         const { accessToken: newAccessToken, refreshToken: newRefreshToken } = await auth.refresh(refreshToken)
-        setCookies(ctx, newAccessToken, newRefreshToken)
+        setCookies(ctx, bank, newAccessToken, newRefreshToken)
         ctx.state.accessToken = newAccessToken
         return next()
     }
@@ -56,6 +68,15 @@ const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, 
     }
 }
 
+//see ../../src/state/bankLogin.tsx
+const BANK_NAMES = [
+    "Bank of Republic",
+    "Belieber Bank",
+    "Buried and Me National Bank",
+    "End of the World as we Grow It Financial",
+    "Fade to Black Credit Union",
+    "Banco de Hotel California"
+]
 
 router.post('/scores', (ctx) => {
     ctx.body = 'Hello World!';
@@ -82,11 +103,17 @@ router.post('/scores', (ctx) => {
     const rewards = await fdxService(token).getRewards().then(rewards => rewards.rewardPrograms.map(({ programName, programUrl }) => ({ programName, programUrl })))
     ctx.body = rewards
 }).get('/auth', async (ctx) => { //on load, client calls this.  If not logged in, redirect to FDX login
+
     const { code } = ctx.request.query
+
+    // auto generate random bank to log into due to limitation of FDX sandbox.  
+    // This is of course quite different from a real implementaiton
+    // which would have a unique url per bank.
+    const bank = BANK_NAMES[Math.floor(Math.random() * BANK_NAMES.length)];
     if (code) {
         const { accessToken, refreshToken } = await auth.auth(code as string)
         ctx.status = 200;
-        setCookies(ctx, accessToken, refreshToken)
+        setCookies(ctx, bank, accessToken, refreshToken)
     }
     else {
         ctx.status = 401

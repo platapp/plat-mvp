@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../styles.css'; 
-
+import '../styles.css';
+import Cookies from 'js-cookie'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -31,6 +31,7 @@ import {
 } from "react-router-dom";
 
 import { Customer } from '../services/fdx'
+import { BankLogin, generateInitialData, BankLoginType } from '../state/bankLogin';
 
 const navLinkCssClasses = (otherClasses: string) => ({ isActive }: { isActive: boolean }): string => {
     return isActive ? `${otherClasses} Mui-selected` : otherClasses
@@ -60,9 +61,26 @@ const drawer = (
 const drawerWidth = 240 //TODO, make this variable
 const container = window !== undefined ? () => window.document.body : undefined;
 
+
+const extractBanksFromCookies = (cookieObject: { [name: string]: string }) => {
+    return Object.keys(cookieObject).map(k => {
+        return k.startsWith("token_") ? k.replace("token_", "") : ""
+
+    }).reduce((aggr, curr) => {
+        return curr === "" ? aggr : { ...aggr, [curr]: true }
+    }, {})
+}
+
+const mergeBanks = (cookieBanks: { [name: string]: boolean }, banks: BankLoginType[]) => {
+    return banks.map(({ bankName }) => ({ bankName, isLoggedIn: bankName in cookieBanks }))
+}
+const initBanks = generateInitialData()
 const Home = () => {
-    const user = useLoaderData() as Customer
+    console.log(Cookies.get())
+    //const user = useLoaderData() as Customer
     const [mobileOpen, setMobileOpen] = useState(false);
+    const bankLogin = mergeBanks(extractBanksFromCookies(Cookies.get()), initBanks)
+    console.log(bankLogin)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -139,17 +157,20 @@ const Home = () => {
             >
                 <Container>
                     <Toolbar />
-                    <Typography 
-                        gutterBottom 
-                        variant="h3" 
+                    <Typography
+                        gutterBottom
+                        variant="h3"
                         component="div"
                         className="textCapitalize"
                     >
-                        {user && `Hello ${user.name.first} ${user.name.last}`}
+                        Welcome, please select your existing relationships
+                        {/*user && `Hello ${user.name.first} ${user.name.last}`*/}
                     </Typography>
-                    <Outlet />
+                    <BankLogin.Provider value={bankLogin}>
+                        <Outlet />
+                    </BankLogin.Provider>
                     <div className="center">
-                        { navigation.state === "loading" && <CircularProgress/> }
+                        {navigation.state === "loading" && <CircularProgress />}
                     </div>
                 </Container>
             </Box>

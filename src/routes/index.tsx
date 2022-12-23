@@ -27,15 +27,15 @@ export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Resp
     }
     return redirect("/")
 }
-
+/*
 export const homeLoader = async ({ request }: ActionFunctionArgs): Promise<Customer> => {
     return getCustomerInfo()
-}
+}*/
 
 const router = createBrowserRouter([
     {
         path: "/",
-        loader: homeLoader,
+        //loader: homeLoader,
         element: <Home />,
         children: MenuItems.map(({ route, element, loader }) => ({
             path: route,

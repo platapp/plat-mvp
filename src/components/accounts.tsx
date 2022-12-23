@@ -45,13 +45,20 @@ const AccountCard = ({ accountType, totalBalance, count }: AccountCardProps) => 
     </Card>
 }
 const Accounts = () => {
-    const accounts = useLoaderData() as Record<L, AccountInfo> | undefined
+    const accounts = useLoaderData() as { account: Record<L, AccountInfo>, bankName: string }[] | undefined
+    console.log(accounts)
+    //return <p>hi</p>
     return <Grid container spacing={2} rowSpacing={2}>{
-        accounts && Object.entries(accounts).map(([key, value]) => {
-            return <Grid xs={12} sm={6} key={key}>
-                <AccountCard accountType={LABELS[key as L]} totalBalance={value.totalBalance} count={value.count} />
-            </Grid>
-        })}
+        accounts && accounts?.map(({ bankName, account }) => <>
+            <Grid xs={12}><h3>{bankName}</h3><br /></Grid>
+            {Object.entries(account).map(([key, value]) => {
+                return <Grid xs={12} sm={6} key={key}>
+                    <AccountCard accountType={LABELS[key as L]} totalBalance={value.totalBalance} count={value.count} />
+                </Grid>
+            })}
+        </>
+        )
+    }
     </Grid>
 }
 export default Accounts
