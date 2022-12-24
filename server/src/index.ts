@@ -89,7 +89,7 @@ router.post('/scores', (ctx) => {
     ctx.body = scores
 }).get('/customer', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)
-    const scores = await fdxService(token).getCustomers().then(customer => customerMetrics(customer, new Date()))
+    const scores = await fdxService(token).getCustomers()//.then(customer => customerMetrics(customer, new Date()))
     ctx.body = scores
 }).get('/transactions', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)

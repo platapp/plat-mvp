@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useLoaderData } from 'react-router-dom';
 import FormGroup from '@mui/material/FormGroup';
@@ -59,7 +60,6 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
 
 const Accounts = () => {
     const accounts = useLoaderData() as { account: Record<L, AccountInfo>, bankName: string }[] | undefined
-    console.log(accounts)
     const [accountsWithChecked, setAccountsWithChecked] = useState(
         accounts && accounts.map(({ bankName, account }) => {
             return {
@@ -71,7 +71,7 @@ const Accounts = () => {
         })
     )
 
-    const setChecked = (bankName: string, accountType: string) => setAccountsWithChecked(
+    const setChecked = (bankName: string, accountType: string) => () => setAccountsWithChecked(
         v => v?.map(banks => banks.bankName === bankName ?
             {
                 bankName,
@@ -81,20 +81,20 @@ const Accounts = () => {
     )
     return <Grid container spacing={2} rowSpacing={2}>
         {accountsWithChecked && accountsWithChecked?.map(({ accounts, bankName }) => {
-            return <Grid container>
+            return <Grid container key={bankName}>
                 <Grid xs={12}><h3>{bankName}</h3><br /></Grid>
                 {
                     accounts.map(({ bankName, totalBalance, checked, count, accountType }) => {
                         return <Grid xs={12} sm={6} key={accountType}>
-                            <AccountCard accountType={accountType} totalBalance={totalBalance} count={count} checked={checked} setChecked={() => setChecked(bankName, accountType)} />
+                            <AccountCard accountType={accountType} totalBalance={totalBalance} count={count} checked={checked} setChecked={setChecked(bankName, accountType)} />
                         </Grid>
                     })
 
                 }
             </Grid>
         })
-
         }
+        <Button variant="contained" onClick={() => alert("Submitted, placeholder for now")}>Submit</Button>
     </Grid >
 }
 export default Accounts

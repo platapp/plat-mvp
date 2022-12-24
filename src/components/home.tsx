@@ -29,7 +29,7 @@ import {
     useNavigation
 } from "react-router-dom";
 
-import { Customer } from '../services/fdx'
+
 import { BankLogin, generateInitialData, BankLoginType } from '../state/bankLogin';
 
 const navLinkCssClasses = (otherClasses: string) => ({ isActive }: { isActive: boolean }): string => {
@@ -75,11 +75,8 @@ const mergeBanks = (cookieBanks: { [name: string]: boolean }, banks: BankLoginTy
 }
 const initBanks = generateInitialData()
 const Home = () => {
-    console.log(Cookies.get())
-    //const user = useLoaderData() as Customer
     const [mobileOpen, setMobileOpen] = useState(false);
     const bankLogin = mergeBanks(extractBanksFromCookies(Cookies.get()), initBanks)
-    console.log(bankLogin)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };

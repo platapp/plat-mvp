@@ -3,9 +3,14 @@ interface Name {
     first: string,
     last: string
 }
+
+interface Address {
+    city: string,
+    postalCode: string
+}
 export interface Customer {
-    customerLocation: string,
-    customerAge: number,
+    dateOfBirth: string,
+    addresses: Address[],
     name: Name
 }
 

@@ -1,12 +1,8 @@
 import { ActionFunctionArgs, redirect } from "react-router-dom";
-import {
-    getAuth,
-    Customer,
-    getCustomerInfo,
-} from '../services/fdx';
+import { getAuth } from '../services/fdx';
 import { createBrowserRouter } from "react-router-dom";
 import Home from '../components/home'
-import { MenuItems } from './children'
+import { MenuItems, RELATIONSHIP_URL } from './children'
 import {
     routeToFDXLogin
 } from "../utils";
@@ -25,7 +21,7 @@ export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Resp
     if (code) {
         await getAuth(code)
     }
-    return redirect("/")
+    return redirect(RELATIONSHIP_URL)
 }
 /*
 export const homeLoader = async ({ request }: ActionFunctionArgs): Promise<Customer> => {

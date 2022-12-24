@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { routeToFDXLogin } from '../utils';
 import { BankLogin } from '../state/bankLogin';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 
 //todo, get list of FDX banks (and preferably with icons!) who have registered with Plat
@@ -72,6 +72,6 @@ export default function ListBanks() {
                 />)
             }
         </List>
-        <Button onClick={() => navigate(`/accounts?${query}`)}>Next</Button>
+        <Button variant="contained" onClick={() => navigate(`/register?${query}`)}>Next</Button>
     </>
 }
