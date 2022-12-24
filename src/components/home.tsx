@@ -23,7 +23,6 @@ import Typography from '@mui/material/Typography';
 import { MenuItems } from '../routes/children'
 import { logout } from '../utils';
 import {
-    useLoaderData,
     NavLink,
     Outlet,
     NavLinkProps,
@@ -157,15 +156,7 @@ const Home = () => {
             >
                 <Container>
                     <Toolbar />
-                    <Typography
-                        gutterBottom
-                        variant="h3"
-                        component="div"
-                        className="textCapitalize"
-                    >
-                        Welcome, please select your existing relationships
-                        {/*user && `Hello ${user.name.first} ${user.name.last}`*/}
-                    </Typography>
+
                     <BankLogin.Provider value={bankLogin}>
                         <Outlet />
                     </BankLogin.Provider>

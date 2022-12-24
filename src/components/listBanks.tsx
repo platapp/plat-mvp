@@ -7,12 +7,13 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import LoginIcon from '@mui/icons-material/Login';
+import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { routeToFDXLogin } from '../utils';
 import { BankLogin } from '../state/bankLogin';
 import { Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-//import { useNavigate } from "react-router-dom";
+
 //todo, get list of FDX banks (and preferably with icons!) who have registered with Plat
 //TODO the routeToFDXLogin should be different per bank in reality
 const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName: string, isLoggedIn: boolean, checked: boolean, setChecked: () => void }) => {
@@ -52,6 +53,14 @@ export default function ListBanks() {
     const selectedBanks = bankInfo.filter(v => v.isChecked).map(v => v.bankName)
     const query = selectedBanks.map(v => `${v}=true`).join("&")
     return <>
+        <Typography
+            gutterBottom
+            variant="h3"
+            component="div"
+            className="textCapitalize"
+        >
+            Welcome, please select your existing relationships
+        </Typography>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {
                 bankInfo.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
@@ -59,6 +68,7 @@ export default function ListBanks() {
                     isLoggedIn={isLoggedIn}
                     checked={isChecked}
                     setChecked={setChecked(bankName)}
+                    key={bankName}
                 />)
             }
         </List>
