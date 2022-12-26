@@ -12,3 +12,25 @@
   align-items: center;
   margin: auto;
 }
+
+.jumbotron {
+  min-height: 100vh;
+  background-color: grey;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url(https://www.dropbox.com/s/d4zbx4ime0hygft/pexels-josh-willink-701014.jpg?raw=1);
+  padding: 5% 0 0 0;
+}
+
+.jumbotron * {
+  color: white;
+}
+
+.jumbotron h2 {
+  font-weight: 800;
+}
+
+.darkBg {
+  background-color: rgba(0,0,0,0.4);
+  padding: 5rem;
+}

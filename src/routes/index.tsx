@@ -3,10 +3,10 @@ import { getAuth } from '../services/fdx';
 import { createBrowserRouter } from "react-router-dom";
 import Home from '../components/home'
 import { MenuItems, RELATIONSHIP_URL } from './children'
-import {
-    routeToFDXLogin
-} from "../utils";
+import { routeToFDXLogin } from "../utils";
 import Login from "../components/login";
+import Start from '../components/start'
+
 const CODE_NAME = "code"
 
 //note that an "unathorized" will be sent back from any fetch that isn't "getAuth".
@@ -39,7 +39,15 @@ const router = createBrowserRouter([
             loader
         }))
     },
-    { path: "/login", element: <Login />, loader: loginLoader }
+    { 
+        path: "/login", 
+        element: <Login />, 
+        loader: loginLoader 
+    },
+    {
+        path: "/start",
+        element: <Start/>
+    }
 ]);
 
 export default router
