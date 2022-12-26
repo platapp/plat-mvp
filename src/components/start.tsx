@@ -46,12 +46,12 @@ const Start = () => {
               <Mui.Typography
                 variant="h4"
                 sx={{mb: 10}}
-              > Whatever you are saving for retirement or need a loan for a new home, you can be confident we're on your side.
+              > Whatever you're saving for retirement or need a loan for a new home, you can be confident we're on your side.
               </Mui.Typography>
               <Mui.Button 
                 variant="contained"
                 size="large"
-                color="primary"
+                color="error"
               >
                 Plan with ABC Bank
               </Mui.Button>
