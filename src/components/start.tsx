@@ -6,6 +6,7 @@ import '../styles.css';
 const Start = () => {
   return <div> 
     <Nav/>
+
     <div className="jumbotron">
       <Mui.Container>
         <div className="darkBg">
@@ -24,13 +25,51 @@ const Start = () => {
             size="large"
             color="info"
             component={Mui.Link}
-            href="relationships"
-          >
-            Plan with ABC Bank
+            href="#learn"
+          > Learn More
           </Mui.Button>
         </div>
       </Mui.Container>
     </div>
+
+    <div className="section" id="learn">
+      <Mui.Container>
+        <Mui.Grid container spacing={3}>
+          <Mui.Grid xs={6}>
+            <Mui.Typography variant="h4" sx={{mb:2}}>
+              <b>We can help you earn and save more.</b>
+            </Mui.Typography>
+
+            <Mui.Typography variant="h5">
+              <p>Being an awesome customer at <i>any</i> of our competitors will save you a lot of pennies at ABC Bank. Our Pinch a Penny service can save you on average 10% annually!</p>
+              <p>Would you like us to look at your existing financial relationships so that we can save you some money? </p>
+            </Mui.Typography>
+            
+            <div className="btn">
+              <Mui.Button 
+                href="relationships"
+                variant="contained"
+                color="info"
+                component={Mui.Link}
+                sx={{mt:2, mb:5}}
+              > Lets Get Started
+              </Mui.Button>
+            </div>
+
+            <Mui.Typography variant="subtitle1">
+              I don't want to save money. Click <Mui.Link href="https://wellsfargo.com">here</Mui.Link> to open an account.
+            </Mui.Typography>
+
+          </Mui.Grid>
+          <Mui.Grid xs={6} sx={{pl:5}} display="flex">
+            <video className="video" controls>
+              <source src="https://www.dropbox.com/s/bvxhsuly4p9t7tf/Plat%20Commercials%20and%20Pitch.m4v?raw=1" type="video/mp4"/>
+            </video>
+          </Mui.Grid>
+        </Mui.Grid>
+      </Mui.Container>
+    </div>
+  
   </div>
 }
 export default Start
