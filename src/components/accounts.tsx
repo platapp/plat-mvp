@@ -41,7 +41,7 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
                 {accountType}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-                You have ${count} ${accountType} with a total value of ${totalBalance}
+                You have {count} {accountType} with a total value of ${totalBalance}
             </Typography>
         </CardContent>
         <CardActions>
