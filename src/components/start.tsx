@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import * as Mui from '@mui/material/';
+import Nav from '../components/nav'
 import '../styles.css';
 
 const Start = () => {
-  return <div className="jumbotron">
+  return <div> 
+    <Nav/>
+    <div className="jumbotron">
       <Mui.Container>
         <div className="darkBg">
           <Mui.Typography
@@ -28,5 +31,6 @@ const Start = () => {
         </div>
       </Mui.Container>
     </div>
+  </div>
 }
 export default Start

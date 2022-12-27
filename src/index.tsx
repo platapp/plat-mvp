@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Nav from './components/nav'
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import '@fontsource/roboto/300.css';
@@ -15,7 +14,6 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <Nav />
     <App />
   </React.StrictMode>
 );
