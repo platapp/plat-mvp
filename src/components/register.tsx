@@ -7,6 +7,8 @@ import { useNavigate, useLoaderData } from 'react-router-dom';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 const Register = () => {
     const customerData = useLoaderData() as { customer: Customer, bankName: string }[] | undefined
@@ -21,21 +23,26 @@ const Register = () => {
             }
         })
     )
+
     const selectBank = (event: SelectChangeEvent) => {
         const selection = event.target.value as string
         setCustomerWithCheck(v => v?.map(v => v.bankName === selection ? { ...v, selected: true } : { ...v, selected: false }))
     }
     const selectedCustomerAttributes = customerWithCheck?.find(v => v.selected)
-    const selectedBank = (selectedCustomerAttributes || (customerWithCheck ? customerWithCheck[0] : { bankName: "" })).bankName
+    const selectedBank = selectedCustomerAttributes?.bankName// || ""
+
     return <Grid container spacing={2} rowSpacing={2}>
         <Grid xs={12}>
-            <Select
-                value={selectedBank}
-                label="Select bank to populate information"
-                onChange={selectBank}
-            >
-                {customerWithCheck?.map(v => <MenuItem key={v.bankName} value={v.bankName}>{v.bankName}</MenuItem>)}
-            </Select>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-helper-label">Bank</InputLabel>
+                <Select
+                    value={selectedBank}
+                    label="Select bank to populate information"
+                    onChange={selectBank}
+                >
+                    {customerWithCheck?.map(v => <MenuItem key={v.bankName} value={v.bankName}>{v.bankName}</MenuItem>)}
+                </Select>
+            </FormControl>
         </Grid>
         <Grid xs={12}>
             <Box
