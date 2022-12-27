@@ -19,7 +19,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-image: url(https://www.dropbox.com/s/d4zbx4ime0hygft/pexels-josh-willink-701014.jpg?raw=1);
-  padding: 5% 0 0 0;
+  padding: 10% 0 0 0;
 }
 
 .jumbotron * {
@@ -28,6 +28,10 @@
 
 .jumbotron h2 {
   font-weight: 800;
+}
+
+.jumbotron:hover a{
+  color: white;
 }
 
 .darkBg {
