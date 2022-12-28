@@ -25,16 +25,7 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
     return <ListItem
         key={bankName}
         secondaryAction={
-            isLoggedIn ? <IconButton edge="end" aria-label="comments">
-                <CheckCircleOutlineIcon />
-            </IconButton> : <IconButton edge="end" aria-label="comments" onClick={routeToFDXLogin}>
-                <LoginIcon />
-            </IconButton>
-        }
-        disablePadding
-    >
-        <ListItemButton role={undefined} onClick={isLoggedIn ? setChecked : undefined} dense>
-            <ListItemIcon>
+            <ListItemButton role={undefined} onClick={isLoggedIn ? setChecked : undefined} dense>
                 <Checkbox
                     edge="start"
                     disabled={!isLoggedIn}
@@ -43,9 +34,22 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
                     disableRipple
                     inputProps={{ 'aria-labelledby': labelId }}
                 />
-            </ListItemIcon>
-            <ListItemText id={labelId} primary={bankName} />
-        </ListItemButton>
+            </ListItemButton>
+
+        }
+        disablePadding
+    >
+
+        <ListItemIcon>
+            {isLoggedIn ? <IconButton edge="end" aria-label="comments">
+                <CheckCircleOutlineIcon />
+            </IconButton> : <IconButton edge="end" aria-label="comments" onClick={routeToFDXLogin}>
+                <LoginIcon />
+            </IconButton>
+            }
+        </ListItemIcon>
+        <ListItemText id={labelId} primary={bankName} />
+
     </ListItem >
 }
 
@@ -55,38 +59,47 @@ export default function ListBanks() {
     const setChecked = (bankName: string) => () => setBankInfo(v => v.map(v => v.bankName === bankName ? ({ ...v, isChecked: !v.isChecked }) : v))
     const navigate = useNavigate();
     const selectedBanks = bankInfo.filter(v => v.isChecked).map(v => v.bankName)
+    const [searchQuery, setSearchQuery] = useState("")
+    const searchBanks = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const search = event.target.value as string
+        setSearchQuery(search)
+    }
     const query = selectedBanks.map(v => `${v}=true`).join("&")
+    const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.startsWith(searchQuery)) : bankInfo
     return <>
         <Grid container spacing={2}>
             <Grid item lg={12} xl={6}>
-            <h1>Financial History</h1>
-            <p>Let's look your financial history. The more we know about you, the more we can help you save!</p>
-            <TextField 
-                id="ListBanksSearch" 
-                label="Search Banks" 
-                variant="standard"
-                sx={{width: "100%", mb: 2}}
-            />
-                
-            <div className="scrollBox">
-                <List>
-                    {
-                        bankInfo.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
-                            bankName={bankName}
-                            isLoggedIn={isLoggedIn}
-                            checked={isChecked}
-                            setChecked={setChecked(bankName)}
-                            key={bankName}
-                        />)
-                    }
-                </List>
-            </div>
-                
-            <Button 
-                variant="contained" 
-                onClick={() => navigate(`/register?${query}`)}
-            > Next
-            </Button>
+                <h1>Financial History</h1>
+                <p>Let's look your financial history. The more we know about you, the more we can help you save!</p>
+                <TextField
+                    id="ListBanksSearch"
+                    label="Search Banks"
+                    variant="standard"
+                    type="search"
+                    value={searchQuery}
+                    sx={{ width: "100%", mb: 2 }}
+                    onChange={searchBanks}
+                />
+
+                <div className="scrollBox">
+                    <List>
+                        {
+                            bankSearch.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
+                                bankName={bankName}
+                                isLoggedIn={isLoggedIn}
+                                checked={isChecked}
+                                setChecked={setChecked(bankName)}
+                                key={bankName}
+                            />)
+                        }
+                    </List>
+                </div>
+
+                <Button
+                    variant="contained"
+                    onClick={() => navigate(`/register?${query}`)}
+                > Next
+                </Button>
             </Grid>
         </Grid>
     </>
