@@ -11,18 +11,22 @@ const Nav = () => {
     >
       <Mui.Container>
         <Mui.Toolbar disableGutters>
+          
           <Mui.Typography
             sx={{mr: 5}}
-          > <b className="brandFont">ABC Bank</b>
+          > <b className="brandFont">ABC</b>
           </Mui.Typography>
+
           <Mui.Typography
             sx={{mr: 2}}
           > Link 2
           </Mui.Typography>
+
           <Mui.Typography
             sx={{mr: 2}}
           > Link 3
           </Mui.Typography>
+
         </Mui.Toolbar>
       </Mui.Container>
     </Mui.AppBar>

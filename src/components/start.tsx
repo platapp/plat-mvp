@@ -26,7 +26,7 @@ const Start = () => {
             color="info"
             component={Mui.Link}
             href="#learn"
-          > Learn More
+          > <span className="btn">Learn More</span>
           </Mui.Button>
         </div>
       </Mui.Container>
@@ -45,16 +45,15 @@ const Start = () => {
               <p>Would you like us to look at your existing financial relationships so that we can save you some money? </p>
             </Mui.Typography>
             
-            <div className="btn">
+            
               <Mui.Button 
                 href="relationships"
                 variant="contained"
                 color="info"
                 component={Mui.Link}
                 sx={{mt:2, mb:5}}
-              > Lets Get Started
+              > <span className="btn">Lets Get Started</span>
               </Mui.Button>
-            </div>
 
             <Mui.Typography variant="subtitle1">
               I don't want to save money. Click <Mui.Link href="https://wellsfargo.com">here</Mui.Link> to open an account.
