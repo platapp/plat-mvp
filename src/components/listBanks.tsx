@@ -13,6 +13,10 @@ import { routeToFDXLogin } from '../utils';
 import { BankLogin } from '../state/bankLogin';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+
+
 
 //todo, get list of FDX banks (and preferably with icons!) who have registered with Plat
 //TODO the routeToFDXLogin should be different per bank in reality
@@ -53,25 +57,37 @@ export default function ListBanks() {
     const selectedBanks = bankInfo.filter(v => v.isChecked).map(v => v.bankName)
     const query = selectedBanks.map(v => `${v}=true`).join("&")
     return <>
-        <Typography
-            gutterBottom
-            variant="h3"
-            component="div"
-            className="textCapitalize"
-        >
-            Welcome, please select your existing relationships
-        </Typography>
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            {
-                bankInfo.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
-                    bankName={bankName}
-                    isLoggedIn={isLoggedIn}
-                    checked={isChecked}
-                    setChecked={setChecked(bankName)}
-                    key={bankName}
-                />)
-            }
-        </List>
-        <Button variant="contained" onClick={() => navigate(`/register?${query}`)}>Next</Button>
+        <Grid container spacing={2}>
+            <Grid item lg={12} xl={6}>
+            <h1>Financial History</h1>
+            <p>Let's look your financial history. The more we know about you, the more we can help you save!</p>
+            <TextField 
+                id="ListBanksSearch" 
+                label="Search Banks" 
+                variant="standard"
+                sx={{width: "100%", mb: 2}}
+            />
+                
+            <div className="scrollBox">
+                <List>
+                    {
+                        bankInfo.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
+                            bankName={bankName}
+                            isLoggedIn={isLoggedIn}
+                            checked={isChecked}
+                            setChecked={setChecked(bankName)}
+                            key={bankName}
+                        />)
+                    }
+                </List>
+            </div>
+                
+            <Button 
+                variant="contained" 
+                onClick={() => navigate(`/register?${query}`)}
+            > Next
+            </Button>
+            </Grid>
+        </Grid>
     </>
 }

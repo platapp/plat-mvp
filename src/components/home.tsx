@@ -116,6 +116,7 @@ const Home = () => {
                     </Tooltip>
                 </Toolbar>
             </AppBar>
+            
             <Box
                 component="nav"
                 sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -133,9 +134,9 @@ const Home = () => {
                         display: { xs: 'block', sm: 'none' },
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
-                >
-                    {drawer}
+                > {drawer}
                 </Drawer>
+
                 <Drawer
                     variant="permanent"
                     sx={{
@@ -143,20 +144,21 @@ const Home = () => {
                         '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
                     }}
                     open
-                >
-                    {drawer}
+                > {drawer}
                 </Drawer>
             </Box >
+
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{ flexGrow: 1, pt: 3, m:5, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
-                <Container>
+                <Container maxWidth="xl">
                     <Toolbar />
-
+                    
                     <BankLogin.Provider value={bankLogin}>
                         <Outlet />
                     </BankLogin.Provider>
+                    
                     <div className="center">
                         {navigation.state === "loading" && <CircularProgress />}
                     </div>

@@ -48,3 +48,10 @@
   height: 40%;
   width: auto;
 }
+
+.scrollBox {
+  height: 20vh;
+  margin: 0 0 2rem 0;
+  padding: 0 1rem 0 0;
+  overflow-y: scroll;
+}
