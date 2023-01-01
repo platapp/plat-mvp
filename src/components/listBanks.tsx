@@ -4,6 +4,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import LoginIcon from '@mui/icons-material/Login';
@@ -25,7 +26,11 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
     return <ListItem
         key={bankName}
         secondaryAction={
-            <ListItemButton role={undefined} onClick={isLoggedIn ? setChecked : undefined} dense>
+            <ListItemButton 
+                role={undefined} 
+                onClick={isLoggedIn ? setChecked : undefined} 
+                dense
+            >
                 <Checkbox
                     edge="start"
                     disabled={!isLoggedIn}
@@ -39,7 +44,6 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
         }
         disablePadding
     >
-
         <ListItemIcon>
             {isLoggedIn ? <IconButton edge="end" aria-label="comments">
                 <CheckCircleOutlineIcon />
@@ -49,7 +53,6 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
             }
         </ListItemIcon>
         <ListItemText id={labelId} primary={bankName} />
-
     </ListItem >
 }
 
@@ -83,6 +86,11 @@ export default function ListBanks() {
 
                 <div className="scrollBox">
                     <List>
+                        <li className="bankListHeader MuiListItem-root MuiListItem-gutters css-g28sfz-MuiListItem-root">
+                            <div className="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root">Login</div>
+                            <div className="MuiListItemText-root css-tlelie-MuiListItemText-root">Financial Institution Name</div>
+                            <div className="MuiListItemSecondaryAction-root css-518kzi-MuiListItemSecondaryAction-root">Transfer</div>
+                        </li>
                         {
                             bankSearch.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem
                                 bankName={bankName}
