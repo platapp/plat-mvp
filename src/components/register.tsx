@@ -31,37 +31,45 @@ const Register = () => {
     const selectedCustomerAttributes = customerWithCheck?.find(v => v.selected)
     const selectedBank = selectedCustomerAttributes?.bankName// || ""
 
-    return <Grid container spacing={2} rowSpacing={2}>
-        <Grid xs={12}>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-helper-label">Bank</InputLabel>
-                <Select
-                    value={selectedBank}
-                    label="Select bank to populate information"
-                    onChange={selectBank}
+    return <div>
+        <Grid container spacing={2} rowSpacing={2}>
+            <Grid xs={6}>
+                <h1>Account Registration</h1>
+                <p>Choose which profile you would like to register with us.</p>
+                <br/>
+                <FormControl sx={{ m: 1, minWidth: '100%' }}>
+                    <InputLabel id="demo-simple-select-helper-label">Choose Bank</InputLabel>
+                    <Select
+                        value={selectedBank}
+                        label="Select bank to populate information"
+                        onChange={selectBank}
+                    >
+                        {customerWithCheck?.map(v => <MenuItem key={v.bankName} value={v.bankName}>{v.bankName}</MenuItem>)}
+                    </Select>
+                </FormControl>
+
+                <Box
+                    component="form"
+                    sx={{
+                        '& > :not(style)': { m: 1 },
+                    }}
+                    noValidate
+                    autoComplete="off"
                 >
-                    {customerWithCheck?.map(v => <MenuItem key={v.bankName} value={v.bankName}>{v.bankName}</MenuItem>)}
-                </Select>
-            </FormControl>
-        </Grid>
-        <Grid xs={12}>
-            <Box
-                component="form"
-                sx={{
-                    '& > :not(style)': { m: 1, width: '25ch' },
-                }}
-                noValidate
-                autoComplete="off"
-            >
-                <TextField id="firstName" label="First Name" variant="standard" value={selectedCustomerAttributes?.customer.name.first || ""} />
-                <TextField id="lastName" label="Last Name" variant="standard" value={selectedCustomerAttributes?.customer.name.last || ""} />
-                <TextField id="dob" label="Date of Birth" variant="standard" value={selectedCustomerAttributes?.customer.dateOfBirth || ""} />
-                <TextField id="city" label="City" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].city || ""} />
-                <TextField id="postalCode" label="Zip Code" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].postalCode || ""} />
-            </Box>
-        </Grid>
-        {/*todo, make this submit to bank prior to redirect to accounts*/}
-        <Button variant="contained" onClick={() => navigate(`/accounts?${query}`)}>Create account</Button>
-    </Grid >
+                    <TextField fullWidth id="firstName" label="First Name" variant="standard" value={selectedCustomerAttributes?.customer.name.first || ""} />
+                    <TextField fullWidth id="lastName" label="Last Name" variant="standard" value={selectedCustomerAttributes?.customer.name.last || ""} />
+                    <TextField fullWidth id="dob" label="Date of Birth" variant="standard" value={selectedCustomerAttributes?.customer.dateOfBirth || ""} />
+                    <TextField fullWidth id="city" label="City" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].city || ""} />
+                    <TextField fullWidth id="postalCode" label="Zip Code" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].postalCode || ""} />
+                </Box>
+                <Button 
+                    variant="contained" 
+                    onClick={() => navigate(`/accounts?${query}`)}
+                    sx={{ mt:5 }}
+                > Create account
+                </Button> {/*todo, make this submit to bank prior to redirect to accounts*/}
+            </Grid>
+        </Grid >
+    </div>
 }
 export default Register
