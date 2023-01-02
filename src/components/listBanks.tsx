@@ -26,9 +26,9 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
     return <ListItem
         key={bankName}
         secondaryAction={
-            <ListItemButton 
-                role={undefined} 
-                onClick={isLoggedIn ? setChecked : undefined} 
+            <ListItemButton
+                role={undefined}
+                onClick={isLoggedIn ? setChecked : undefined}
                 dense
             >
                 <Checkbox
@@ -68,7 +68,7 @@ export default function ListBanks() {
         setSearchQuery(search)
     }
     const query = selectedBanks.map(v => `${v}=true`).join("&")
-    const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.startsWith(searchQuery)) : bankInfo
+    const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.toLowerCase().startsWith(searchQuery.toLowerCase())) : bankInfo
     return <>
         <Grid container spacing={2}>
             <Grid item lg={12} xl={6}>
