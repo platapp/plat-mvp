@@ -33,7 +33,7 @@ const Register = () => {
 
     return <div>
         <Grid container spacing={2} rowSpacing={2}>
-            <Grid xs={6}>
+            <Grid xl={6} lg={8}>
                 <h1>Account Registration</h1>
                 <p>Choose which profile you would like to register with us.</p>
                 <br/>
