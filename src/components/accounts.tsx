@@ -35,22 +35,28 @@ const LABELS = {
 export type L = keyof typeof LABELS
 
 const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: AccountCardProps) => {
-    return <Card >
+    return <Card>
         <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant="h6" component="div">
                 {accountType}
             </Typography>
             <Typography variant="body2" color="text.secondary">
                 You have {count} {accountType} with a total value of ${totalBalance}
             </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions className="alignRight">
             <FormGroup>
-                <FormControlLabel control={<Checkbox
-                    checked={checked}
-                    onClick={setChecked}
-                    disableRipple
-                />} label={`Move to new bank`} />
+                <FormControlLabel 
+                    control={ 
+                        <Checkbox 
+                            checked={checked} 
+                            onClick={setChecked} 
+                            disableRipple
+                            size="small"
+                        /> 
+                    } 
+                    label={ `Transfer` }
+                />
             </FormGroup>
         </CardActions>
     </Card>
@@ -79,22 +85,35 @@ const Accounts = () => {
             }
             : banks)
     )
-    return <Grid container spacing={2} rowSpacing={2}>
-        {accountsWithChecked && accountsWithChecked?.map(({ accounts, bankName }) => {
-            return <Grid container key={bankName}>
-                <Grid xs={12}><h3>{bankName}</h3><br /></Grid>
-                {
-                    accounts.map(({ bankName, totalBalance, checked, count, accountType }) => {
-                        return <Grid xs={12} sm={6} key={accountType}>
-                            <AccountCard accountType={accountType} totalBalance={totalBalance} count={count} checked={checked} setChecked={setChecked(bankName, accountType)} />
-                        </Grid>
-                    })
 
-                }
-            </Grid>
-        })
-        }
+    return <div>
+            {
+                accountsWithChecked && accountsWithChecked?.map(({ accounts, bankName }) => {
+                    return <Grid container key={bankName}>
+                        <Grid xs={12}>
+                            <h3>{bankName}</h3>
+                        </Grid>
+                        <Grid xs={12} xl={8} className="cardGroup">
+                            {
+                                accounts.map(({ bankName, totalBalance, checked, count, accountType }) => {
+                                    return <Grid xs={12} key={accountType}>
+                                        <div className="singleCard">
+                                            <AccountCard 
+                                                accountType={accountType} 
+                                                totalBalance={totalBalance} 
+                                                count={count} 
+                                                checked={checked} 
+                                                setChecked={setChecked(bankName, accountType)}
+                                            /> {/* todo: list all accounts so that customers can choose what to transfer. also display how much money they can earn/save by switching to ABC Bank */}
+                                        </div>
+                                    </Grid>
+                                })
+                            }
+                        </Grid>
+                    </Grid>
+                })
+            }
         <Button variant="contained" onClick={() => alert("Submitted, placeholder for now")}>Submit</Button>
-    </Grid >
+    </div>
 }
 export default Accounts
