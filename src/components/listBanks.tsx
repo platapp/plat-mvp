@@ -16,6 +16,10 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import Dialog from '@mui/material/Dialog';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 
 
 
@@ -23,12 +27,18 @@ import Grid from '@mui/material/Grid';
 //TODO the routeToFDXLogin should be different per bank in reality
 const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName: string, isLoggedIn: boolean, checked: boolean, setChecked: () => void }) => {
     const labelId = `checkbox-list-label-${bankName}`;
+    
+    // dialog
+    const [open, setOpen] = React.useState(false)
+    const handleClickOpen = () => { setOpen(true) }
+    const handleClose = () => { setOpen(false) }
+
     return <ListItem
         key={bankName}
         secondaryAction={
             <ListItemButton 
-                role={undefined} 
-                onClick={isLoggedIn ? setChecked : undefined} 
+                role={undefined}
+                onClick={ isLoggedIn ? setChecked : undefined }
                 dense
             >
                 <Checkbox
@@ -44,15 +54,77 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
         }
         disablePadding
     >
-        <ListItemIcon>
-            {isLoggedIn ? <IconButton edge="end" aria-label="comments">
-                <CheckCircleOutlineIcon />
-            </IconButton> : <IconButton edge="end" aria-label="comments" onClick={routeToFDXLogin}>
-                <LoginIcon />
-            </IconButton>
+        <ListItemIcon onClick={handleClickOpen}>
+
+            { 
+                isLoggedIn ? 
+                    <IconButton edge="end" aria-label="comments">
+                        <CheckCircleOutlineIcon />
+                    </IconButton> 
+                    : <IconButton edge="end" aria-label="comments" onClick={routeToFDXLogin}>
+                        <LoginIcon />
+                    </IconButton>
             }
+
         </ListItemIcon>
+
         <ListItemText id={labelId} primary={bankName} />
+
+        <Dialog 
+            fullScreen 
+            open={open} 
+            onClose={handleClose}
+        > 
+            <Container>
+                <Grid container spacing={2}>
+                    <Grid xs={12}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                '& > :not(style)': {
+                                    m: 1,
+                                    width: "50vw",
+                                    height: "80vh",
+                                    p: 10,
+                                    mt: 20
+                                },
+                            }}
+                            >
+                            <Paper elevation={3}>
+                            
+                            <h1>Bank Login</h1>
+
+                            <p>Note that this is a simulated login used to demonstrate a pain-point during an account transfer process. The ideal scenario be a customer logging into a session once to view all accounts at all financial institutions. Current day however, a customer would have to log into each banking platform/website to load their own account during this account transfer process.</p>
+
+                            <br/>
+
+                            <TextField
+                                required
+                                id="loginUser"
+                                label="Username"
+                                variant="standard"
+                                fullWidth
+                                sx={{mb:5}}
+                                defaultValue="User1"
+                            />
+
+                            <TextField
+                                id="loginPass"
+                                label="Password"
+                                type="password"
+                                variant="standard"
+                                fullWidth
+                                sx={{mb:5}}
+                                defaultValue="Password1"
+                            />
+                            <Button variant="contained" onClick={handleClose}>Login</Button>
+                            </Paper>
+                        </Box>
+                    </Grid>
+                </Grid>
+            </Container>
+        </Dialog>
     </ListItem >
 }
 
