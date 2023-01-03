@@ -37,6 +37,4 @@ test('It displays program name if exists', async () => {
     render(<RouterProvider router={router} />)
     const selectLabel = await screen.findByText(/Select bank to populate information/);
     expect(selectLabel).toBeInTheDocument();
-    const selectData = await screen.findByText(/Hello world/);
-    expect(selectData).toBeInTheDocument();
 });

@@ -4,11 +4,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import LoginIcon from '@mui/icons-material/Login';
-import Typography from '@mui/material/Typography';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { routeToFDXLogin } from '../utils';
 import { BankLogin } from '../state/bankLogin';
@@ -140,7 +138,7 @@ export default function ListBanks() {
         setSearchQuery(search)
     }
     const query = selectedBanks.map(v => `${v}=true`).join("&")
-    const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.startsWith(searchQuery)) : bankInfo
+    const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.toLowerCase().startsWith(searchQuery.toLowerCase())) : bankInfo
     return <>
         <Grid container spacing={2}>
             <Grid item lg={12} xl={6}>

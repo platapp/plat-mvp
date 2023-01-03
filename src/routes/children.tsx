@@ -7,6 +7,7 @@ import { ActionFunctionArgs } from "react-router-dom";
 import { getAccountInfo, Customer, getCustomerInfo } from '../services/fdx';
 import ListBanks from '../components/listBanks';
 import Register from '../components/register';
+import Placeholder from '../components/placeholder';
 export const RELATIONSHIP_URL = "/relationships"
 export const MenuItems = [
     {
@@ -16,7 +17,7 @@ export const MenuItems = [
         element: <ListBanks />
     },
     {
-        name: "Register",
+        name: "Register New Bank",
         route: "/register",
         icon: <HowToRegIcon />,
         element: <Register />,
@@ -28,7 +29,7 @@ export const MenuItems = [
         }
     },
     {
-        name: "Accounts",
+        name: "Transfer Accounts",
         route: "/accounts",
         icon: <AccountBalanceWalletIcon />,
         element: <Accounts />,
@@ -39,4 +40,9 @@ export const MenuItems = [
             return accounts.map((account, index) => ({ account, bankName: bankNames[index] }))
         }
     },
+    {
+        name: "Account setup complete",
+        route: "/placeholder",
+        element: <Placeholder />
+    }
 ]

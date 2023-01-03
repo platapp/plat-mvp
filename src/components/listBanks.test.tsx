@@ -20,7 +20,7 @@ test('It displays welcome', async () => {
         },
     ], { initialEntries: ["/"] });
     render(<RouterProvider router={router} />)
-    const welcome = await screen.findByText(/Welcome, please select your existing relationships/i);
+    const welcome = await screen.findByText(/Let's look your financial history. The more we know about you, the more we can help you save!/i);
     expect(welcome).toBeInTheDocument();
 });
 

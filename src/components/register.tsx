@@ -36,11 +36,11 @@ const Register = () => {
             <Grid xl={6} lg={8}>
                 <h1>Account Registration</h1>
                 <p>Choose which profile you would like to register with us.</p>
-                <br/>
+                <br />
                 <FormControl sx={{ m: 1, minWidth: '100%' }}>
                     <InputLabel id="demo-simple-select-helper-label">Choose Bank</InputLabel>
                     <Select
-                        value={selectedBank}
+                        value={selectedBank || ""}
                         label="Select bank to populate information"
                         onChange={selectBank}
                     >
@@ -62,10 +62,10 @@ const Register = () => {
                     <TextField fullWidth id="city" label="City" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].city || ""} />
                     <TextField fullWidth id="postalCode" label="Zip Code" variant="standard" value={selectedCustomerAttributes?.customer.addresses[0].postalCode || ""} />
                 </Box>
-                <Button 
-                    variant="contained" 
+                <Button
+                    variant="contained"
                     onClick={() => navigate(`/accounts?${query}`)}
-                    sx={{ mt:5 }}
+                    sx={{ mt: 5 }}
                 > Create account
                 </Button> {/*todo, make this submit to bank prior to redirect to accounts*/}
             </Grid>
