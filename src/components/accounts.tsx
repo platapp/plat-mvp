@@ -94,7 +94,7 @@ const Accounts = () => {
                     <Grid xs={12}>
                         <h3>{bankName}</h3>
                     </Grid>
-                    <Grid xs={12} xl={8} className="cardGroup">
+                    <Grid xs={12} className="cardGroup">
                         {
                             accounts.map(({ bankName, totalBalance, checked, count, accountType }) => {
                                 return <Grid xs={12} key={accountType}>

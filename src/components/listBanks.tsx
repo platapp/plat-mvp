@@ -141,7 +141,7 @@ export default function ListBanks() {
     const bankSearch = searchQuery ? bankInfo.filter(({ bankName }) => bankName.toLowerCase().startsWith(searchQuery.toLowerCase())) : bankInfo
     return <>
         <Grid container spacing={2}>
-            <Grid item lg={12} xl={6}>
+            <Grid item lg={12}>
                 <h1>Financial History</h1>
                 <p>Let's look your financial history. The more we know about you, the more we can help you save!</p>
                 <TextField

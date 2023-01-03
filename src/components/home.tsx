@@ -95,7 +95,7 @@ const Home = () => {
                     <Toolbar />
                     <BankLogin.Provider value={bankLogin}>
                         {location.pathname === "/" && welcome}
-                        <Stepper activeStep={MenuItems.map(v => v.route).indexOf(location.pathname)} alternativeLabel>
+                        <Stepper activeStep={MenuItems.map(v => v.route).indexOf(location.pathname)} alternativeLabel sx={{mb:10}}>
                             {MenuItems.filter((_, index, arr) => index < arr.length - 1).map(({ name, route, icon }) => {
                                 const stepProps: { completed?: boolean } = {};
                                 const labelProps: {
