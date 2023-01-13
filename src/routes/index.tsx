@@ -1,16 +1,12 @@
 import { ActionFunctionArgs, redirect } from "react-router-dom";
-import {
-    getAuth,
-    Customer,
-    getCustomerInfo,
-} from '../services/fdx';
+import { getAuth } from '../services/fdx';
 import { createBrowserRouter } from "react-router-dom";
 import Home from '../components/home'
-import { MenuItems } from './children'
-import {
-    routeToFDXLogin
-} from "../utils";
+import { MenuItems, RELATIONSHIP_URL } from './children'
+import { routeToFDXLogin } from "../utils";
 import Login from "../components/login";
+import Start from '../components/start'
+
 const CODE_NAME = "code"
 
 //note that an "unathorized" will be sent back from any fetch that isn't "getAuth".
@@ -25,17 +21,17 @@ export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Resp
     if (code) {
         await getAuth(code)
     }
-    return redirect("/")
+    return redirect(RELATIONSHIP_URL)
 }
-
+/*
 export const homeLoader = async ({ request }: ActionFunctionArgs): Promise<Customer> => {
     return getCustomerInfo()
-}
+}*/
 
 const router = createBrowserRouter([
     {
         path: "/",
-        loader: homeLoader,
+        //loader: homeLoader,
         element: <Home />,
         children: MenuItems.map(({ route, element, loader }) => ({
             path: route,
@@ -43,7 +39,15 @@ const router = createBrowserRouter([
             loader
         }))
     },
-    { path: "/login", element: <Login />, loader: loginLoader }
+    { 
+        path: "/login", 
+        element: <Login />, 
+        loader: loginLoader 
+    },
+    {
+        path: "/start",
+        element: <Start/>
+    }
 ]);
 
 export default router

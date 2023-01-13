@@ -1,81 +1,65 @@
 import React, { useState } from 'react';
-import '../styles.css'; 
-
+import '../styles.css';
+import Cookies from 'js-cookie'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-
-import { MenuItems } from '../routes/children'
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import { MenuItems, RELATIONSHIP_URL } from '../routes/children'
 import { logout } from '../utils';
 import {
-    useLoaderData,
-    NavLink,
     Outlet,
-    NavLinkProps,
-    useNavigation
+    useNavigation,
+    useLocation,
+    Link
 } from "react-router-dom";
 
-import { Customer } from '../services/fdx'
 
-const navLinkCssClasses = (otherClasses: string) => ({ isActive }: { isActive: boolean }): string => {
-    return isActive ? `${otherClasses} Mui-selected` : otherClasses
+import { BankLogin, generateInitialData, BankLoginType } from '../state/bankLogin';
+
+
+const welcome = (
+    <p>Welcome to Plat Onboarding!  Click <Link to={RELATIONSHIP_URL}>here</Link> to start!</p>
+)
+
+const extractBanksFromCookies = (cookieObject: { [name: string]: string }) => {
+    return Object.keys(cookieObject).map(k => {
+        return k.startsWith("token_") ? k.replace("token_", "") : ""
+
+    }).reduce((aggr, curr) => {
+        return curr === "" ? aggr : { ...aggr, [curr]: true }
+    }, {})
 }
-const MyOwnNavLink = React.forwardRef<HTMLAnchorElement, NavLinkProps & { className: string }>((props: NavLinkProps & { className: string }, ref) => {
-    return <NavLink ref={ref} {...props} className={navLinkCssClasses(props.className || "")} />
-})
-const drawer = (
-    <div>
-        <Toolbar />
-        <Divider />
-        <List>
-            {MenuItems.map(({ name, route, icon }) => (
-                <ListItem key={name} disablePadding>
-                    <ListItemButton component={MyOwnNavLink} to={route} >
-                        <ListItemIcon>
-                            {icon}
-                        </ListItemIcon>
-                        <ListItemText primary={name} />
-                    </ListItemButton>
-                </ListItem>
-            ))}
-        </List>
-    </div>
-);
 
-const drawerWidth = 240 //TODO, make this variable
-const container = window !== undefined ? () => window.document.body : undefined;
 
+const mergeBanks = (cookieBanks: { [name: string]: boolean }, banks: BankLoginType[]) => {
+    return banks.map(({ bankName }) => ({ bankName, isLoggedIn: bankName in cookieBanks }))
+}
+const initBanks = generateInitialData()
 const Home = () => {
-    const user = useLoaderData() as Customer
     const [mobileOpen, setMobileOpen] = useState(false);
+    const bankLogin = mergeBanks(extractBanksFromCookies(Cookies.get()), initBanks)
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
     const navigation = useNavigation()
+    const location = useLocation()
     return <div className="full">
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar
                 position="fixed"
-                sx={{
-                    width: { sm: `calc(100% - ${drawerWidth}px)` },
-                    ml: { sm: `${drawerWidth}px` },
-                }}
+
             >
                 <Toolbar>
                     <IconButton
@@ -102,54 +86,33 @@ const Home = () => {
                     </Tooltip>
                 </Toolbar>
             </AppBar>
-            <Box
-                component="nav"
-                sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-                aria-label="mailbox folders"
-            >
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-                <Drawer
-                    variant="permanent"
-                    sx={{
-                        display: { xs: 'none', sm: 'block' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                    open
-                >
-                    {drawer}
-                </Drawer>
-            </Box >
+
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+                sx={{ flexGrow: 1, pt: 3, m: 5 }}
             >
-                <Container>
+                <Container maxWidth="xl">
                     <Toolbar />
-                    <Typography 
-                        gutterBottom 
-                        variant="h3" 
-                        component="div"
-                        className="textCapitalize"
-                    >
-                        {user && `Hello ${user.name.first} ${user.name.last}`}
-                    </Typography>
-                    <Outlet />
+                    <BankLogin.Provider value={bankLogin}>
+                        {location.pathname === "/" && welcome}
+                        <Stepper activeStep={MenuItems.map(v => v.route).indexOf(location.pathname)} alternativeLabel sx={{mb:10}}>
+                            {MenuItems.filter((_, index, arr) => index < arr.length - 1).map(({ name, route, icon }) => {
+                                const stepProps: { completed?: boolean } = {};
+                                const labelProps: {
+                                    optional?: React.ReactNode;
+                                } = {};
+                                return (
+                                    <Step key={name} {...stepProps}>
+                                        <StepLabel {...labelProps}>{name}</StepLabel>
+                                    </Step>
+                                );
+                            })}
+                        </Stepper>
+                        <Outlet />
+                    </BankLogin.Provider>
+
                     <div className="center">
-                        { navigation.state === "loading" && <CircularProgress/> }
+                        {navigation.state === "loading" && <CircularProgress />}
                     </div>
                 </Container>
             </Box>

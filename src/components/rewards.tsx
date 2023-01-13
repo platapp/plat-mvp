@@ -1,4 +1,3 @@
-
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useLoaderData } from 'react-router-dom';
 export interface Reward {

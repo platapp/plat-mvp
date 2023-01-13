@@ -3,9 +3,14 @@ interface Name {
     first: string,
     last: string
 }
+
+interface Address {
+    city: string,
+    postalCode: string
+}
 export interface Customer {
-    customerLocation: string,
-    customerAge: number,
+    dateOfBirth: string,
+    addresses: Address[],
     name: Name
 }
 
@@ -19,8 +24,8 @@ const wrapFetch = async (url: string) => {
     }
 }
 
-export const getCustomerInfo = () => wrapFetch(`/customer`)
-export const getTransactionInfo = () => wrapFetch(`/transactions`)
-export const getAccountInfo = () => wrapFetch(`/accounts`)
-export const getRewards = () => wrapFetch(`/rewards`)
+export const getCustomerInfo = (bank: string) => wrapFetch(`/customer?bank=${bank}`)
+export const getTransactionInfo = (bank: string) => wrapFetch(`/transactions?bank=${bank}`)
+export const getAccountInfo = (bank: string) => wrapFetch(`/accounts?bank=${bank}`)
+export const getRewards = (bank: string) => wrapFetch(`/rewards?bank=${bank}`)
 export const getAuth = (code: string) => fetch(`/auth?code=${code}`)
