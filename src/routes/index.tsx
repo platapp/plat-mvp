@@ -23,15 +23,10 @@ export const loginLoader = async ({ request }: ActionFunctionArgs): Promise<Resp
     }
     return redirect(RELATIONSHIP_URL)
 }
-/*
-export const homeLoader = async ({ request }: ActionFunctionArgs): Promise<Customer> => {
-    return getCustomerInfo()
-}*/
 
 const router = createBrowserRouter([
     {
         path: "/",
-        //loader: homeLoader,
         element: <Home />,
         children: MenuItems.map(({ route, element, loader }) => ({
             path: route,
@@ -39,14 +34,14 @@ const router = createBrowserRouter([
             loader
         }))
     },
-    { 
-        path: "/login", 
-        element: <Login />, 
-        loader: loginLoader 
+    {
+        path: "/login",
+        element: <Login />,
+        loader: loginLoader
     },
     {
         path: "/start",
-        element: <Start/>
+        element: <Start />
     }
 ]);
 
