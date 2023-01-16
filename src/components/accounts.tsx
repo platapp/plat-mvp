@@ -9,36 +9,98 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-interface AccountCardProps {
-    accountType: string,
-    count: number,
-    totalBalance: number,
-    checked: boolean,
-    setChecked: () => void
-}
+
 
 export interface AccountInfo {
     count: number,
     totalBalance: number
 }
+
 const LABELS = {
     annuityAccount: "Annuities",
     depositAccount: "Deposit accounts",
     insuranceAccount: "Insurance accounts",
     investmentAccount: "Investment accounts",
     loanAccount: "Loans",
-    locAccount: "LOCs",
-    totalTransactions: "Number of transaction in last 12 months",
-    averageTransactionSize: "Average transaction size"
+    locAccount: "LOCs"
 }
+
 
 export type L = keyof typeof LABELS
 
-const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: AccountCardProps) => {
+interface AccountCardProps {
+    accountType: L,
+    accountLabel: string,
+    count: number,
+    totalBalance: number,
+    checked: boolean,
+    setChecked: () => void
+}
+
+const DepositCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
+        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held <span hidden>for at least 3 years</span> at any institution quality for an additional 25 basis points on their transferred deposits.
+    </p> : <p>Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.</p>
+}
+
+
+const LoanCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>
+        Good News! Based on your history at other institutions, we can lower your rate by 25 basis points on top of our already great rates.
+        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis point off their transferred loans.
+    </p> : <p>
+        Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points off their transferred loans.
+    </p>
+}
+
+const LOCCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>
+        Good News! Based on your history at other institutions, we can lower your rate by 25 basis points on top of our already great rates.
+        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis point off their transferred LOCs.
+    </p> : <p>
+        Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of LOCs held at any institution quality for an additional 25 basis points off their transferred loans.
+    </p>
+}
+
+const AnnuityCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>
+        Good News! Based on your history at other institutions, we can waive fees associated with your annuity!
+    </p> : <p>
+        Based on your history at other institutions, you qualify for our standard pricing.
+    </p>
+}
+
+const InsuranceCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>
+        Good News! Based on your history at other institutions, we can lower your monthly premium!
+    </p> : <p>
+        Based on your history at other institutions, you qualify for our standard pricing.
+    </p>
+}
+
+const InvestmentCard = ({ totalBalance, count }: AccountInfo) => {
+    return totalBalance > 20000 ? <p>
+        Good News! Based on your history at other institutions, we can waive fees associated with your investments!
+    </p> : <p>
+        Based on your history at other institutions, you qualify for our standard pricing.
+    </p>
+}
+
+const accountCard = {
+    annuityAccount: AnnuityCard,
+    depositAccount: DepositCard,
+    insuranceAccount: InsuranceCard,
+    investmentAccount: InvestmentCard,
+    loanAccount: LoanCard,
+    locAccount: LOCCard,
+}
+
+
+const AccountCard = ({ accountType, accountLabel, totalBalance, count, checked, setChecked }: AccountCardProps) => {
     return <Card>
         <CardContent>
             <Typography gutterBottom variant="h6" component="div">
-                {accountType}
+                {accountLabel}
                 <CardActions className="alignRight">
                     <FormGroup>
                         <FormControlLabel
@@ -57,42 +119,9 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
             </Typography>
 
             <Typography variant="body2">
-                <p>You have {count} {accountType} with a total value of ${totalBalance}</p>
+                <p>You have {count} {accountLabel} with a total value of ${totalBalance}</p>
                 <div>
-                    {
-                        totalBalance >= 20000 && accountType === "Deposit accounts" ?
-                            <p>
-                                {totalBalance} Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
-                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held <span hidden>for at least 3 years</span> at any institution quality for an additional 25 basis points on their transferred deposits.
-                            </p>
-                        : 
-                            ""
-                    }
-                    {
-                        totalBalance < 20000 && accountType === "Deposit accounts" ?
-                            <p>
-                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.
-                            </p> 
-                        : 
-                            ""
-                    }
-                    {
-                        totalBalance >= 20000 && accountType === "Loans" ?
-                            <p>
-                                Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
-                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
-                            </p>
-                        : 
-                            ""
-                    }
-                    {
-                        totalBalance < 20000 && accountType === "Loans" ?
-                            <p>
-                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
-                            </p> 
-                        : 
-                            ""
-                    }
+                    {accountCard[accountType]({ totalBalance, count })}
                 </div>
             </Typography>
         </CardContent>
@@ -107,13 +136,13 @@ const Accounts = () => {
                 bankName,
                 accounts: Object.entries(account)
                     .filter(([_key, value]) => value.count)
-                    .map(([key, value]) => ({ bankName, accountType: LABELS[key as L], ...value, checked: false }))
+                    .map(([key, value]) => ({ bankName, accountType: key as L, accountLabel: LABELS[key as L], ...value, checked: false }))
             }
         })
     )
     const navigate = useNavigate();
 
-    const setChecked = (bankName: string, accountType: string) => () => setAccountsWithChecked(
+    const setChecked = (bankName: string, accountType: L) => () => setAccountsWithChecked(
         v => v?.map(banks => banks.bankName === bankName ?
             {
                 bankName,
@@ -123,7 +152,7 @@ const Accounts = () => {
     )
 
     return <div>
-        <Grid xs={12} sx={{mb:10}}>
+        <Grid xs={12} sx={{ mb: 10 }}>
             <h2 className="fw-light">Bring your relationship with you.</h2>
             <h5 className="fw-light">Did you know that your history as a bank customer has value? Customers with great history can save and earn a lot of money.</h5>
         </Grid>
@@ -136,11 +165,12 @@ const Accounts = () => {
                     </Grid>
                     <Grid xs={12} className="cardGroup">
                         {
-                            accounts.map(({ bankName, totalBalance, checked, count, accountType }) => {
+                            accounts.map(({ bankName, totalBalance, checked, count, accountType, accountLabel }) => {
                                 return <Grid xs={12} key={accountType}>
                                     <div className="singleCard">
                                         <AccountCard
                                             accountType={accountType}
+                                            accountLabel={accountLabel}
                                             totalBalance={totalBalance}
                                             count={count}
                                             checked={checked}
