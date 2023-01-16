@@ -39,26 +39,63 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
         <CardContent>
             <Typography gutterBottom variant="h6" component="div">
                 {accountType}
+                <CardActions className="alignRight">
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={checked}
+                                    onClick={setChecked}
+                                    disableRipple
+                                    size="small"
+                                />
+                            }
+                            label={`Transfer`}
+                        />
+                    </FormGroup>
+                </CardActions>
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-                You have {count} {accountType} with a total value of ${totalBalance}
+
+            <Typography variant="body2">
+                <p>You have {count} {accountType} with a total value of ${totalBalance}</p>
+                <div>
+                    {
+                        totalBalance >= 20000 && accountType === "Deposit accounts" ?
+                            <p>
+                                {totalBalance} Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held <span hidden>for at least 3 years</span> at any institution quality for an additional 25 basis points on their transferred deposits.
+                            </p>
+                        : 
+                            ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "Deposit accounts" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.
+                            </p> 
+                        : 
+                            ""
+                    }
+                    {
+                        totalBalance >= 20000 && accountType === "Loans" ?
+                            <p>
+                                Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
+                            </p>
+                        : 
+                            ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "Loans" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
+                            </p> 
+                        : 
+                            ""
+                    }
+                </div>
             </Typography>
         </CardContent>
-        <CardActions className="alignRight">
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={checked}
-                            onClick={setChecked}
-                            disableRipple
-                            size="small"
-                        />
-                    }
-                    label={`Transfer`}
-                />
-            </FormGroup>
-        </CardActions>
     </Card>
 }
 
@@ -88,6 +125,11 @@ const Accounts = () => {
     )
 
     return <div>
+        <Grid sx={{mb:10}}>
+            <h2>Bring your relationship with you.</h2>
+            <p>Did you know that your history as a bank customer has value? Customers with great history can save and earn a lot of money.</p>
+        </Grid>
+
         {
             accountsWithChecked && accountsWithChecked?.map(({ accounts, bankName }) => {
                 return <Grid container key={bankName}>
