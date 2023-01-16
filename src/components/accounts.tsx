@@ -123,9 +123,9 @@ const Accounts = () => {
     )
 
     return <div>
-        <Grid sx={{mb:10}}>
-            <h2>Bring your relationship with you.</h2>
-            <p>Did you know that your history as a bank customer has value? Customers with great history can save and earn a lot of money.</p>
+        <Grid xs={12} sx={{mb:10}}>
+            <h2 className="fw-light">Bring your relationship with you.</h2>
+            <h5 className="fw-light">Did you know that your history as a bank customer has value? Customers with great history can save and earn a lot of money.</h5>
         </Grid>
 
         {
