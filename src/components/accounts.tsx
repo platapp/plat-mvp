@@ -99,8 +99,6 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
     </Card>
 }
 
-
-
 const Accounts = () => {
     const accounts = useLoaderData() as { account: Record<L, AccountInfo>, bankName: string }[] | undefined
     const [accountsWithChecked, setAccountsWithChecked] = useState(
