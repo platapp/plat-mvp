@@ -56,27 +56,3 @@ export const accountTypes = (accounts: Accounts[], statements: Statement[]) => {
     }, ACCOUNT_TYPE_MAP)
 }
 
-type Location = Record<string, number>
-export const customerMetrics = (customer: Customer, currentDate: Date) => {
-    const { name, dateOfBirth, addresses } = customer
-    return {
-        customerAge: currentDate.getFullYear() - new Date(dateOfBirth).getFullYear(),
-        name,
-        customerLocation: Object.entries(addresses.reduce<Location>((agg, curr) => {
-            if (agg[curr.postalCode]) {
-                agg[curr.postalCode] += 1
-            }
-            else {
-                agg[curr.postalCode] = 1
-            }
-            return agg
-        }, {})).reduce((aggr, [postalCode, numOccurance]) => {
-            if (aggr.occur < numOccurance) {
-                return { occur: numOccurance, postalCode }
-            }
-            else {
-                return aggr
-            }
-        }, { occur: 0, postalCode: "" }).postalCode //selects postal code that shows up most frequently in the address list
-    }
-}

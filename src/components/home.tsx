@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import '../styles.css';
 import Cookies from 'js-cookie'
 import AppBar from '@mui/material/AppBar';
@@ -8,7 +8,6 @@ import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -47,11 +46,7 @@ const mergeBanks = (cookieBanks: { [name: string]: boolean }, banks: BankLoginTy
 }
 const initBanks = generateInitialData()
 const Home = () => {
-    const [mobileOpen, setMobileOpen] = useState(false);
     const bankLogin = mergeBanks(extractBanksFromCookies(Cookies.get()), initBanks)
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen);
-    };
     const navigation = useNavigation()
     const location = useLocation()
     return <div className="full">
@@ -59,18 +54,8 @@ const Home = () => {
             <CssBaseline />
             <AppBar
                 position="fixed"
-
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         Plat
                     </Typography>
@@ -95,7 +80,7 @@ const Home = () => {
                     <Toolbar />
                     <BankLogin.Provider value={bankLogin}>
                         {location.pathname === "/" && welcome}
-                        <Stepper activeStep={MenuItems.map(v => v.route).indexOf(location.pathname)} alternativeLabel sx={{mb:10}}>
+                        <Stepper activeStep={MenuItems.map(v => v.route).indexOf(location.pathname)} alternativeLabel sx={{ mb: 10 }}>
                             {MenuItems.filter((_, index, arr) => index < arr.length - 1).map(({ name, route, icon }) => {
                                 const stepProps: { completed?: boolean } = {};
                                 const labelProps: {

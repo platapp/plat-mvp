@@ -140,7 +140,8 @@ export const fdxServices = (apiUrl: string) => (token: string) => {
         },
 
     }
-}//
+}
+
 export const fdxAuth = (
     authUrl: string,
     redirectUri: string,

@@ -18,5 +18,5 @@ test('It displays user if exists', async () => {
     ], { initialEntries: ["/"] });
     render(<RouterProvider router={router} />)
     const user = await screen.findAllByText(/Existing Relationships/i);
-    expect(user.length).toBeGreaterThan(0)//toBeInTheDocument();
+    expect(user.length).toBeGreaterThan(0)
 });

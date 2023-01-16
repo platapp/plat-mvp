@@ -69,7 +69,6 @@ const BankListItem = ({ bankName, isLoggedIn, checked, setChecked }: { bankName:
         <ListItemText id={labelId} primary={bankName} />
 
         <Dialog
-            //fullScreen
             open={open}
             onClose={handleClose}
         >

@@ -1,4 +1,4 @@
-import { averageTransactions, accountTypes, customerMetrics } from '../scores'
+import { averageTransactions, accountTypes } from '../scores'
 import { Accounts, AccountTypes, TransactionTypes, Transactions } from '../service';
 
 describe('averageTransactions', () => {
@@ -87,63 +87,6 @@ describe('accountTypes', () => {
             investmentAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "currentValue", },
             insuranceAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "policyCoverageAmount", },
             annuityAccount: { minDateOpened: "", count: 0, totalBalance: 0.0, balanceKey: "surrenderValue", }
-        })
-    })
-})
-
-describe("customerMetrics", () => {
-    it("gets rough years old", () => {
-        const customer = {
-            dateOfBirth: "2002-03-03",
-            addresses: [
-                {
-                    city: "somecity",
-                    postalCode: "12345"
-                }
-            ],
-            name: {
-                first: "daniel",
-                last: "stahl"
-            }
-        }
-        expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
-            customerAge: 20,
-            customerLocation: "12345",
-            name: {
-                first: "daniel",
-                last: "stahl"
-            }
-        })
-    })
-    it("gets customer location", () => {
-        const customer = {
-            dateOfBirth: "2002-03-03",
-            addresses: [
-                {
-                    city: "somecity",
-                    postalCode: "12345"
-                },
-                {
-                    city: "somecity",
-                    postalCode: "54321"
-                },
-                {
-                    city: "somecity",
-                    postalCode: "12345"
-                }
-            ],
-            name: {
-                first: "daniel",
-                last: "stahl"
-            }
-        }
-        expect(customerMetrics(customer, new Date("2022-04-04"))).toEqual({
-            customerAge: 20,
-            customerLocation: "12345",
-            name: {
-                first: "daniel",
-                last: "stahl"
-            }
         })
     })
 })

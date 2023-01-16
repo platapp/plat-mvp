@@ -1,7 +1,7 @@
 import Koa from "koa";
 import serve from "koa-static";
 import Router from '@koa/router'
-import { averageTransactions, accountTypes, customerMetrics, minStatementDate } from "./scores";
+import { averageTransactions, accountTypes } from "./scores";
 import { fdxServices, fdxAuth } from "./service";
 import * as dotenv from 'dotenv'
 dotenv.config()
@@ -33,11 +33,11 @@ const setCookies = (
 ) => {
     const tokenName = getTokenName(bank)
     const refreshTokenName = getRefreshTokenName(bank)
-    //secure should be `true` in production
+    // secure should be `true` in production
     ctx.cookies.set(tokenName, accessToken, { secure: false, httpOnly: false, maxAge: 3600000 }); //expire after an hour
 
-    //expire later than access token so that if user is playing around in the app it doesn't redirect to login
-    //secure should be `true` in production
+    // expire later than access token so that if user is playing around in the app it doesn't redirect to login
+    // secure should be `true` in production
     ctx.cookies.set(refreshTokenName, refreshToken, { secure: false, httpOnly: false, maxAge: 3700000 });
 }
 const getToken = (
@@ -68,7 +68,9 @@ const cookieMiddleware = async (ctx: Koa.ParameterizedContext<Koa.DefaultState, 
     }
 }
 
-//see ../../src/state/bankLogin.tsx
+// see ../../src/state/bankLogin.tsx
+// harcoding bank names like this would not be required in 
+// a "production" application where each bank was an FDX member
 const BANK_NAMES = [
     "Bank of Republic",
     "Belieber Bank",
@@ -89,7 +91,7 @@ router.post('/scores', (ctx) => {
     ctx.body = scores
 }).get('/customer', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)
-    const scores = await fdxService(token).getCustomers()//.then(customer => customerMetrics(customer, new Date()))
+    const scores = await fdxService(token).getCustomers()
     ctx.body = scores
 }).get('/transactions', cookieMiddleware, async (ctx) => {
     const token = getToken(ctx)
