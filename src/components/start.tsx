@@ -35,8 +35,9 @@ const Start = () => {
     <div className="section" id="learn">
       <Mui.Container>
         <Mui.Grid container spacing={3}>
-          <Mui.Grid xs={6}>
-            <Mui.Typography variant="h4" sx={{ mb: 2 }}>
+          <Mui.Grid xl={6}>
+
+            <Mui.Typography variant="h4" sx={{ mb:2}}>
               <b>We can help you earn and save more.</b>
             </Mui.Typography>
 
@@ -58,14 +59,15 @@ const Start = () => {
             <Mui.Typography variant="subtitle1">
               I don't want to save money. Click <Mui.Link href="http://127.0.0.1:3001/start">here</Mui.Link> to open an account.
             </Mui.Typography>
-
           </Mui.Grid>
-          <Mui.Grid xs={6} sx={{ pl: 5 }} display="flex">
+
+          <Mui.Grid xl={6} display="flex" sx={{p:5}}>
             <video className="video" controls>
               <source src="https://www.dropbox.com/s/bvxhsuly4p9t7tf/Plat%20Commercials%20and%20Pitch.m4v?raw=1" type="video/mp4" />
             </video>
           </Mui.Grid>
         </Mui.Grid>
+        
       </Mui.Container>
     </div>
 
