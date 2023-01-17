@@ -56,7 +56,7 @@ const Start = () => {
             </Mui.Button>
 
             <Mui.Typography variant="subtitle1">
-              I don't want to save money. Click <Mui.Link href="https://wellsfargo.com">here</Mui.Link> to open an account.
+              I don't want to save money. Click <Mui.Link href="http://127.0.0.1:3001/start">here</Mui.Link> to open an account.
             </Mui.Typography>
 
           </Mui.Grid>

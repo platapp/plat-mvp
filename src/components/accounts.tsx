@@ -62,36 +62,110 @@ const AccountCard = ({ accountType, totalBalance, count, checked, setChecked }: 
                     {
                         totalBalance >= 20000 && accountType === "Deposit accounts" ?
                             <p>
-                                {totalBalance} Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
-                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held <span hidden>for at least 3 years</span> at any institution quality for an additional 25 basis points on their transferred deposits.
+                                Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.
                             </p>
-                        : 
-                            ""
+                        : ""
                     }
                     {
                         totalBalance < 20000 && accountType === "Deposit accounts" ?
                             <p>
-                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of deposits held at any institution quality for an additional 25 basis points on their transferred deposits.
                             </p> 
-                        : 
-                            ""
+                        : ""
                     }
                     {
                         totalBalance >= 20000 && accountType === "Loans" ?
                             <p>
-                                Good News! Based on your history at other institutions, we can add an additional 25 basis points on top of our already great rates.
+                                Good News! Based on your history at other institutions, we can remove an additional 25 basis points on top of our already great rates.
+                                
                                 Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
                             </p>
-                        : 
-                            ""
+                        : ""
                     }
                     {
                         totalBalance < 20000 && accountType === "Loans" ?
                             <p>
-                                Based on your history at other institutions, you qualify for our standard pricing. Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of loans held at any institution quality for an additional 25 basis points on their transferred loans.
                             </p> 
-                        : 
-                            ""
+                        : ""
+                    }
+                    {
+                        totalBalance >= 20000 && accountType === "LOCs" ?
+                            <p>
+                                Good News! Based on your history at other institutions, we can remove an additional 25 basis points on top of our already great rates.
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of LOCs held at any institution quality for an additional 25 basis points on their transferred LOCs.
+                            </p>
+                        : ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "LOCs" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of LOCs held at any institution quality for an additional 25 basis points on their transferred LOCs.
+                            </p> 
+                        : ""
+                    }
+                    {
+                        totalBalance >= 20000 && accountType === "Investment accounts" ?
+                            <p>
+                                Good News! Based on your history at other institutions, we can remove fees on top of our already great pricing.
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Investment accounts held at any institution quality for an additional 25 basis points on their transferred Investment accounts.
+                            </p>
+                        : ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "Investment accounts" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Investment accounts held at any institution quality for an additional 25 basis points on their transferred Investment accounts.
+                            </p> 
+                        : ""
+                    }
+                    {
+                        totalBalance >= 20000 && accountType === "Insurance accounts" ?
+                            <p>
+                                Good News! Based on your history at other institutions, we can remove fees on top of our already great pricing.
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Insurance accounts held at any institution quality for an additional 25 basis points on their transferred Insurance accounts.
+                            </p>
+                        : ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "Insurance accounts" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Insurance accounts held at any institution quality for an additional 25 basis points on their transferred Insurance accounts.
+                            </p> 
+                        : ""
+                    }
+                    {
+                        totalBalance >= 20000 && accountType === "Annuities" ?
+                            <p>
+                                Good News! Based on your history at other institutions, we can remove fees on top of our already great pricing.
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Annuities held at any institution quality for an additional 25 basis points on their transferred Annuities.
+                            </p>
+                        : ""
+                    }
+                    {
+                        totalBalance < 20000 && accountType === "Annuities" ?
+                            <p>
+                                Based on your history at other institutions, you qualify for our standard pricing. 
+                                
+                                Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Annuities held at any institution quality for an additional 25 basis points on their transferred Annuities.
+                            </p> 
+                        : ""
                     }
                 </div>
             </Typography>

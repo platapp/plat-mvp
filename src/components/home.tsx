@@ -50,14 +50,12 @@ const Home = () => {
     const navigation = useNavigation()
     const location = useLocation()
     return <div className="full">
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex'}}>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-            >
+            <AppBar position="fixed">
                 <Toolbar>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        Plat
+                    <Typography variant="h3" noWrap component="div" sx={{ flexGrow: 1, py: 2 }}>
+                        <span className="brandFont">ABC</span> & Plat
                     </Typography>
                     <Tooltip title="Token refresh">
                         <IconButton
@@ -74,7 +72,7 @@ const Home = () => {
 
             <Box
                 component="main"
-                sx={{ flexGrow: 1, pt: 3, m: 5 }}
+                sx={{ flexGrow: 1, pt: 3, my: 10, mx: 5 }}
             >
                 <Container maxWidth="xl">
                     <Toolbar />

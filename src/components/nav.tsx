@@ -19,11 +19,13 @@ const Nav = () => {
 
           <Mui.Typography
             sx={{ mr: 2 }}
+            hidden
           > Link 2
           </Mui.Typography>
 
           <Mui.Typography
             sx={{ mr: 2 }}
+            hidden
           > Link 3
           </Mui.Typography>
 
