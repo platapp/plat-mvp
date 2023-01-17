@@ -1,4 +1,4 @@
-import { Transactions, Accounts, Account, AccountTypes, Customer, extractObjFromKey, BalanceType, Statement } from './service'
+import { Transactions, Accounts, Account, AccountTypes, extractObjFromKey, BalanceType, Statement } from './service'
 
 interface AccountSummary {
     count: number,
