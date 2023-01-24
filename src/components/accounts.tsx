@@ -60,13 +60,13 @@ const LoanCard = ({ totalBalance, count }: AccountInfo) => {
 }
 
 const LOCCard = ({ totalBalance, count }: AccountInfo) => {
-    return totalBalance > 20000 ? <p>
+    return totalBalance > 0 ? <p>
         Good News! Based on your history at other institutions, we can lower your rate by 25 basis points on top of our already great rates.
-        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of LOCs held at any institution quality for an additional 25 basis point off their transferred LOCs.
+        Does your current bank value you as a customer? At ABC Bank, customers with Line of Credits held at any institution quality for an additional 25 basis point off their transferred Line of Credits.
     </p> 
     : <p>
         Based on your history at other institutions, you qualify for our standard pricing. 
-        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of LOCs held at any institution quality for an additional 25 basis points off their transferred LOCs.
+        Does your current bank value you as a customer? At ABC Bank, customers with over $20,000 of Line of Credits held at any institution quality for an additional 25 basis points off their transferred Line of Credits.
     </p>
 }
 
