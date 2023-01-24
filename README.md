@@ -23,7 +23,8 @@ The hackathon will look at documentation. This section is reserved to go over th
 
 # Account Transfer Incentives
 The incentives implemented for this demonstration are as follows:
-- When a customer transfers $20,000 to ABC Bank, the customer is offered an inventive of 25 basis points in savings (example: loans) or additional interest (example: deposit accounts). 
+- When a customer transfers $20,000 (with exception of LOCs) to ABC Bank, the customer is offered an incentive of 25 basis points in savings (example: loans) or additional interest (example: deposit accounts). 
+- Customers who transfers LOCs to ABC Bank are offered an incentive of 25 basis points.
 - Ideally Plat would use customer information that is not currently part of the FDX API, such as an account open date, to uncover other potential incentives for the customer.
 
 
