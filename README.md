@@ -22,12 +22,6 @@ The closest solutions are account aggregation and authentication using data acce
 * [UI/UX](https://youtu.be/ZNsTHpsd-z8)
 * [Plat FAQ](https://www.youtube.com/watch?v=CNbxhfprD38)
 
-
-<br>
-
-# Server Implementation & FDX API Usage:
-The hackathon will look at documentation. This section is reserved to go over things server related.
-
 <br>
 
 # Account Transfer Incentives
