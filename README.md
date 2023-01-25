@@ -13,8 +13,15 @@ Plat leverages FDX APIs to analyze a customer's accounts and transactions.
 The closest solutions are account aggregation and authentication using data access platforms, with Finicity offering
 
 ## See documentation and context within the /docs folder for a PPTX/PDF
-* [Powerpoint Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pdf)
-* [PDF Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pptx)
+* [PDF Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pdf)
+* [PowerPoint Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pptx)
+
+## See Video walkthroughs:
+* [App Walkthrough](https://www.youtube.com/watch?v=cPhDvuCNGvo)
+* [ABC Bank & Plat Commercial](https://youtu.be/md3jtd6pEsc)
+* [UI/UX](https://youtu.be/ZNsTHpsd-z8)
+* [Plat FAQ](https://www.youtube.com/watch?v=CNbxhfprD38)
+
 
 <br>
 
