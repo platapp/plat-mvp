@@ -1,9 +1,10 @@
 import Koa from "koa";
-import serve from "koa-static";
+const send = require('koa-send')
 import Router from '@koa/router'
 import { averageTransactions, accountTypes } from "./scores";
 import { fdxServices, fdxAuth } from "./service";
 import * as dotenv from 'dotenv'
+import path from 'path'
 dotenv.config()
 
 const router = new Router();
@@ -122,7 +123,15 @@ router.post('/scores', (ctx) => {
     }
 
 })
-app.use(serve("../build/"))
 
+app.use(async (ctx) => {
+    const root = path.resolve('../build')
+    if (ctx.path === "/login" || ctx.path === "/") {
+        await send(ctx, "/", { root, index: "index.html" });
+    }
+    else {
+        await send(ctx, ctx.path, { root, index: "index.html" });
+    }
+})
 
 app.listen(PORT);
