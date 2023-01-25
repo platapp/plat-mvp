@@ -45,6 +45,14 @@ The incentives implemented for this demonstration are as follows:
 
 `npm run install-all`
 
+`npm run build`
+
+`npm run server-start`
+
+*Note: If you are using Windows Subsystem for Linux, the redirect back to 127.0.0.1:3001/ does not work, you should use the development mode below to test the system*
+
+## Development
+
 In development, the dev client runs on 3001 and the dev server on 3002.  The oauth redirect still goes to 3001 on the client and then proxies everything to 3002.
 
 `npm start`
