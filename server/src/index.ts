@@ -126,7 +126,7 @@ router.post('/scores', (ctx) => {
 
 app.use(async (ctx) => {
     const root = path.resolve('../build')
-    if (ctx.path === "/login" || ctx.path === "/" || ctx.path === "/start") {
+    if (path.extname(ctx.path) === "") {
         await send(ctx, "/", { root, index: "index.html" });
     }
     else {
