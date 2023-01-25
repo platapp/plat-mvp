@@ -78,3 +78,12 @@
 .fw-light {
   font-weight: 100;
 }
+
+.tableHeaderRight {
+  float:right;
+}
+
+.tableHeader {
+  display: inline-block;
+  padding-right: 1.0rem;
+}

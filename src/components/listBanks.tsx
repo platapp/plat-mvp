@@ -137,9 +137,9 @@ export default function ListBanks() {
                 <div className="scrollBox">
                     <List>
                         <li className="bankListHeader MuiListItem-root MuiListItem-gutters css-g28sfz-MuiListItem-root">
-                            <div className="MuiListItemIcon-root css-cveggr-MuiListItemIcon-root">Login</div>
-                            <div className="MuiListItemText-root css-tlelie-MuiListItemText-root">Financial Institution Name</div>
-                            <div className="MuiListItemSecondaryAction-root css-518kzi-MuiListItemSecondaryAction-root">Transfer</div>
+                            <div className="tableHeader MuiListItemIcon-root css-cveggr-MuiListItemIcon-root">Login</div>
+                            <div className="tableHeader MuiListItemText-root css-tlelie-MuiListItemText-root">Financial Institution Name</div>
+                            <div className="tableHeaderRight MuiListItemSecondaryAction-root css-518kzi-MuiListItemSecondaryAction-root">Transfer</div>
                         </li>
                         {
                             bankSearch.map(({ bankName, isLoggedIn, isChecked }) => <BankListItem

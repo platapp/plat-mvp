@@ -1,23 +1,25 @@
 # Plat Overview:
 
 ## Who is this solution is intended for?
-list primary and secondary user(s) of this app ...
+Plat is an app to allow customers to transfer their bank account and relationships to a new bank (in this example, ABC bank)
 
 ## What is this solution is attempting to solve?
-this app is a demonstration on how plat can help ...
+Demonstrate relationship portability using open banking and the FDX API
 
 ## How is this solution addresses the problem?
-this app leverages FDX APIs to analyze a customer history ... 
+Plat leverages FDX APIs to analyze a customer's accounts and transactions. 
 
 ## Similar solutions and what makes this different
-banks already have a mechanism to transfer accounts however Plat provides customers incentives to ...
+The closest solutions are account aggregation and authentication using data access platforms, with Finicity offering
 
+## See documentation and context within the /docs folder for a PPTX/PDF
+* [Powerpoint Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pdf)
+* [PDF Summary](./docs/Plat-Hackathon-Preparation-Materials-2023-01-24-v5.pptx)
 
 <br>
 
 # Server Implementation & FDX API Usage:
 The hackathon will look at documentation. This section is reserved to go over things server related.
-
 
 <br>
 
@@ -35,13 +37,6 @@ The incentives implemented for this demonstration are as follows:
 ## How to run
 
 `npm run install-all`
-
-`npm run build` to create the client code
-
-`npm run server-start` to run the server on port 3001 and go to `http://localhost:3001`
-
-
-## Development
 
 In development, the dev client runs on 3001 and the dev server on 3002.  The oauth redirect still goes to 3001 on the client and then proxies everything to 3002.
 
