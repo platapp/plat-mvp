@@ -4,7 +4,9 @@ const Placeholder = () => {
     return <Grid container spacing={2}>
         <Grid item lg={12} xl={6}>
             <h1>Placeholder for submission</h1>
-            <p>Congrats!  You have finished transferring your accounts (but not for real!).  A real implementation would have to actually do the transer and account open work.</p>
+            <h4 className="fw-light">Congrats! You have finished transferring your accounts (but not for real!).  A real implementation would have to actually do the transfer and account open work.</h4>
+            <br/>
+            <a href="/start">Back to Home</a>
         </Grid>
     </Grid>
 }

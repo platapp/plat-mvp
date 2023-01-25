@@ -1,3 +1,37 @@
+# Plat Overview:
+
+## Who is this solution is intended for?
+list primary and secondary user(s) of this app ...
+
+## What is this solution is attempting to solve?
+this app is a demonstration on how plat can help ...
+
+## How is this solution addresses the problem?
+this app leverages FDX APIs to analyze a customer history ... 
+
+## Similar solutions and what makes this different
+banks already have a mechanism to transfer accounts however Plat provides customers incentives to ...
+
+
+<br>
+
+# Server Implementation & FDX API Usage:
+The hackathon will look at documentation. This section is reserved to go over things server related.
+
+
+<br>
+
+# Account Transfer Incentives
+The incentives implemented for this demonstration are as follows:
+- When a customer transfers $20,000 (with exception of LOCs) to ABC Bank, the customer is offered an incentive of 25 basis points in savings (example: loans) or additional interest (example: deposit accounts). 
+- Customers who transfers LOCs to ABC Bank are offered an incentive of 25 basis points.
+- Ideally Plat would use customer information that is not currently part of the FDX API, such as an account open date, to uncover other potential incentives for the customer.
+
+
+<br>
+
+# Other Notes:
+
 ## How to run
 
 `npm run install-all`
@@ -35,4 +69,3 @@ CLIENT_SECRET = "[yourclientsecret]"
 FDX_URL="https://financialdataexchange-prod.apigee.net/fdx-core-api-v51"
 FDX_OIDC_URL="https://tdm.financialdataexchange.org/fdxriauthserver/oauth2/token"
 ```
-

@@ -45,8 +45,8 @@
 }
 
 .section video {
-  height: 40%;
-  width: auto;
+  height: 100%;
+  width: 100%;
 }
 
 .scrollBox {
