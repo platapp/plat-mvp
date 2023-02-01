@@ -37,7 +37,7 @@ The incentives implemented for this demonstration are as follows:
 
 ## How to run
 
-`npm run install-all`
+`npm run install all`
 
 `npm run build`
 
